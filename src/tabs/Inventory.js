@@ -24,7 +24,16 @@ function Inventory() {
                             <tr key={p.id}>
                                 <td>{p.name}</td>
                                 <td>{p.category}</td>
-                                <td>{p.quantity}</td>
+                                <td><td>
+                                    {p.quantity < 5 ? (
+                                     <span className="stock-badge low-stock">{p.quantity} (Low)</span>
+                                          ) : p.quantity < 20 ? (
+                                            <span className="stock-badge medium-stock">{p.quantity} (Medium)</span>
+                                                ) : (
+                                                    <span className="stock-badge high-stock">{p.quantity} (High)</span>
+                                                              )}
+                                    </td>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

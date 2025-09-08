@@ -1,47 +1,62 @@
-{
-  "name": "etern-react",
-  "version": "0.1.0",
-  "private": true,
-  "homepage": "https://divinechukwudi.github.io/inventory-system",
-  "dependencies": {
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.6.4",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "react-icons": "^5.5.0",
-    "react-router-dom": "^7.8.1",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
+[
+  {
+    "id": 1,
+    "name": "Chicken & Rice Takeaway",
+    "category": "Food",
+    "price": 19.99,
+    "quantity": 10
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+  {
+    "id": 2,
+    "name": "Topper Biscuits",
+    "category": "Snacks",
+    "price": 11.99,
+    "quantity": 35
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  {
+    "id": 3,
+    "name": "Goslos Chips",
+    "category": "Snacks",
+    "price": 7.99,
+    "quantity": 27
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "gh-pages": "^6.1.0"
+  {
+    "id": 4,
+    "name": "Coke",
+    "category": "Drinks",
+    "price": 23.99,
+    "quantity": 14
   }
-}
+  ,
+  {
+    "id": 5,
+    "name": "Beef Stew with Rice",
+    "category": "Food",
+    "price": 19.99,
+    "quantity": 14
+  }
+  ,
+  {
+    "id": 7,
+    "name": "Fanta",
+    "category": "Drinks",
+    "price": 14.99,
+    "quantity": 14
+  }
+  ,
+  {
+    "id": 8,
+    "name": "Vetkoeok(FatCakes)",
+    "category": "Baked Foods",
+    "price": 1.00,
+    "quantity": 14
+  }
+  ,
+  {
+    "id": 8,
+    "name": "Coke",
+    "category": "Drinks",
+    "price": 24,
+    "quantity": 14
+  }
+]

@@ -1,0 +1,95 @@
+/* Page container */
+.inventory {
+  text-align: center;
+  padding: 20px;
+}
+
+.inventory h1 {
+  font-size: 2rem;
+  color: dodgerblue;
+  margin-bottom: 10px;
+}
+
+.inventory h2 {
+  font-size: 1.5rem;
+  margin: 20px 0 15px;
+  color: #333;
+  text-align: center;
+}
+
+/* Table container */
+table {
+  width: 90%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Header row with gradient */
+thead {
+  background: linear-gradient(90deg, dodgerblue, #1e90ff, #4682b4);
+  color: white;
+}
+
+th, td {
+  padding: 14px 18px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Table body rows */
+tbody tr {
+  transition: all 0.2s ease-in-out;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background: rgba(30, 144, 255, 0.08);
+  transform: scale(1.01);
+}
+
+/* Stock level badges */
+.stock-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: white;
+}
+
+.low-stock {
+  background: #e74c3c; /* red */
+}
+
+.medium-stock {
+  background: #f39c12; /* orange */
+}
+
+.high-stock {
+  background: #2ecc71; /* green */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  table {
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    padding: 10px;
+  }
+}

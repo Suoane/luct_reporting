@@ -1,8 +1,6 @@
 
 body{
     background-color: rgb(255, 255, 255);
-    
-
 }
 
 .dashboard {
@@ -103,7 +101,7 @@ body{
   margin-bottom: 30px;
 }
 
-/* Cards container */
+
 .dashboard-cards {
   display: flex;
   flex-wrap: wrap;
@@ -111,7 +109,7 @@ body{
   gap: 20px;
 }
 
-/* Card style */
+
 .dash-card {
   flex: 1 1 220px;
   max-width: 260px;
@@ -127,14 +125,14 @@ body{
   transform: translateY(-5px);
 }
 
-/* Headings inside cards */
+
 .dash-card h2 {
   margin-bottom: 10px;
   font-size: 1.3rem;
   color: #333;
 }
 
-/* Module-specific accents */
+
 .inventory-card {
   border-top: 4px solid dodgerblue;
 }
@@ -148,7 +146,7 @@ body{
   border-top: 4px solid #9b59b6;
 }
 
-/* Coming soon text */
+
 .coming-soon {
   font-size: 0.85rem;
   color: #aaa;

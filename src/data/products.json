@@ -51,12 +51,4 @@
     "price": 1.00,
     "quantity": 14
   }
-  ,
-  {
-    "id": 8,
-    "name": "Coke",
-    "category": "Drinks",
-    "price": 24,
-    "quantity": 14
-  }
 ]

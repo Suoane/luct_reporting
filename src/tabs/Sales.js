@@ -1,20 +1,11 @@
-import { useState } from "react";
+import { useContext } from "react";
 import ProductForm from "../components/ProductForm";
 import ProductTable from "../components/ProductTable";
+import { ProductContext } from "../context/ProductContext";
 import "./Sales.css";
 
 function Sales() {
-  const [products, setProducts] = useState([]);
-
-  const addProduct = (product) => {
-    setProducts([...products, product]);
-  };
-
-  const deleteProduct = (index) => {
-    const updated = [...products];
-    updated.splice(index, 1);
-    setProducts(updated);
-  };
+  const { products, addProduct, deleteProduct } = useContext(ProductContext);
 
   return (
     <div className="sales">

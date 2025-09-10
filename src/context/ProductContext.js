@@ -5,7 +5,7 @@ export const ProductContext = createContext();
 export function ProductProvider({ children }) {
   const [products, setProducts] = useState(() => {
     const saved = localStorage.getItem("products");
-    // Start with saved products if they exist, otherwise empty
+    
     return saved ? JSON.parse(saved) : [];
   });
 

@@ -12,7 +12,7 @@ function App() {
     <ProductProvider>
       <Router>
         <div className="app">
-          {/* Sidebar */}
+          
           <nav>
             <div className="nav-header">
               <img src={Logo} alt="Wings Cafe Logo" className="logo" />
@@ -26,20 +26,20 @@ function App() {
             </ul>
           </nav>
 
-          {/* Main Content */}
+         
           <div className="content">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/inventory" element={<Inventory />} />
               <Route path="/sales" element={<Sales />} />
               <Route path="/reports" element={<Reports />} />
-              {/* Default redirect to Dashboard */}
+             
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </div>
         </div>
 
-        {/* Footer */}
+        
         <footer className="footer">
           <p>© 2025 Wings Cafe Inventory System | Designed by eterncodes</p>
         </footer>

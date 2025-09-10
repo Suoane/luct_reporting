@@ -6,7 +6,7 @@ import "./Inventory.css";
 function Inventory() {
   const { products: liveProducts } = useContext(ProductContext);
 
-  // Merge static + live
+  
   const allProducts = [...staticProducts, ...liveProducts];
 
   return (

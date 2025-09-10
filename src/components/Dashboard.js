@@ -6,7 +6,7 @@ import staticProducts from "../data/products.json";
 function Dashboard() {
   const { products: liveProducts } = useContext(ProductContext);
 
-  // Combine static (immutable) + live (context/localStorage) products
+  
   const allProducts = [...staticProducts, ...liveProducts];
 
   const totalProducts = allProducts.length;

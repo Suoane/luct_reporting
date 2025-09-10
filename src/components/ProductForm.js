@@ -16,7 +16,7 @@ function ProductForm({ onAddProduct }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onAddProduct(formData);
-    setFormData({ name: "", category: "", price: "", quantity: "" }); // reset
+    setFormData({ name: "", category: "", price: "", quantity: "" }); 
   };
 
   return (

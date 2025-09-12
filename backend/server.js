@@ -4,12 +4,24 @@ const cors = require("cors");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// === ✅ CORS FIX ===
+const allowedOrigins = [
+  "https://inventory-system-front-git-6316a0-divinechukwudi-3003s-projects.vercel.app",
+  "http://localhost:3000" // Optional: allow local dev
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow requests with no origin (e.g., mobile apps, curl)
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error("CORS policy does not allow access from this origin."), false);
+  }
+}));
+
 app.use(express.json());
 
 const PRODUCTS_FILE = __dirname + "/products.json";
 const SALES_FILE = __dirname + "/sales.json";
-
 
 const readFile = (file, cb) => {
   fs.readFile(file, (err, data) => {
@@ -25,7 +37,6 @@ app.get("/api/products", (req, res) => {
   });
 });
 
-
 app.post("/api/products", (req, res) => {
   readFile(PRODUCTS_FILE, (err, products) => {
     if (err) return res.status(500).json({ error: "Failed to read file" });
@@ -37,10 +48,8 @@ app.post("/api/products", (req, res) => {
   });
 });
 
-
 app.put("/api/products/:id", (req, res) => {
   const id = parseInt(req.params.id);
-
   readFile(PRODUCTS_FILE, (err, products) => {
     if (err) return res.status(500).json({ error: "Failed to read file" });
 
@@ -54,10 +63,8 @@ app.put("/api/products/:id", (req, res) => {
   });
 });
 
-
 app.delete("/api/products/:id", (req, res) => {
   const id = parseInt(req.params.id);
-
   readFile(PRODUCTS_FILE, (err, products) => {
     if (err) return res.status(500).json({ error: "Failed to read file" });
 
@@ -69,17 +76,12 @@ app.delete("/api/products/:id", (req, res) => {
   });
 });
 
-
-
-
-
 app.get("/api/sales", (req, res) => {
   readFile(SALES_FILE, (err, sales) => {
     if (err) return res.status(500).json({ error: "Failed to read file" });
     res.json(sales);
   });
 });
-
 
 app.post("/api/sales", (req, res) => {
   readFile(SALES_FILE, (err, sales) => {

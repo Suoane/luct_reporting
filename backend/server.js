@@ -2,14 +2,13 @@ const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000; // <-- Heroku-friendly port
 
 app.use(cors());
 app.use(express.json());
 
 const PRODUCTS_FILE = __dirname + "/products.json";
 const SALES_FILE = __dirname + "/sales.json";
-
 
 const readFile = (file, cb) => {
   fs.readFile(file, (err, data) => {
@@ -25,7 +24,6 @@ app.get("/api/products", (req, res) => {
   });
 });
 
-
 app.post("/api/products", (req, res) => {
   readFile(PRODUCTS_FILE, (err, products) => {
     if (err) return res.status(500).json({ error: "Failed to read file" });
@@ -36,7 +34,6 @@ app.post("/api/products", (req, res) => {
     });
   });
 });
-
 
 app.put("/api/products/:id", (req, res) => {
   const id = parseInt(req.params.id);
@@ -54,7 +51,6 @@ app.put("/api/products/:id", (req, res) => {
   });
 });
 
-
 app.delete("/api/products/:id", (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -69,17 +65,12 @@ app.delete("/api/products/:id", (req, res) => {
   });
 });
 
-
-
-
-
 app.get("/api/sales", (req, res) => {
   readFile(SALES_FILE, (err, sales) => {
     if (err) return res.status(500).json({ error: "Failed to read file" });
     res.json(sales);
   });
 });
-
 
 app.post("/api/sales", (req, res) => {
   readFile(SALES_FILE, (err, sales) => {

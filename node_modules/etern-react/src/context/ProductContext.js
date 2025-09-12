@@ -2,18 +2,23 @@ import { createContext, useState, useEffect } from "react";
 
 export const ProductContext = createContext();
 
+// Load base URL from .env file (or fallback)
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+
 export function ProductProvider({ children }) {
   const [products, setProducts] = useState([]);
 
+  // Fetch all products
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+    fetch(`${BASE_URL}/api/products`)
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Failed to fetch products:", err));
   }, []);
 
+  // Add a new product
   const addProduct = (product) => {
-    fetch("http://localhost:5000/api/products", {
+    fetch(`${BASE_URL}/api/products`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(product),
@@ -23,14 +28,16 @@ export function ProductProvider({ children }) {
       .catch((err) => console.error("Failed to add product:", err));
   };
 
+  // Delete a product
   const deleteProduct = (id) => {
-    fetch(`http://localhost:5000/api/products/${id}`, {
+    fetch(`${BASE_URL}/api/products/${id}`, {
       method: "DELETE",
     })
       .then(() => setProducts(products.filter((p) => p.id !== id)))
       .catch((err) => console.error("Failed to delete product:", err));
   };
 
+  // Update a product
   const updateProduct = (id, updatedData) => {
     const product = products.find((p) => p.id === id);
     if (!product) return;
@@ -40,7 +47,7 @@ export function ProductProvider({ children }) {
       ...updatedData,
     };
 
-    fetch(`http://localhost:5000/api/products/${id}`, {
+    fetch(`${BASE_URL}/api/products/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedProduct),

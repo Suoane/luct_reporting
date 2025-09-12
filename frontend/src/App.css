@@ -106,16 +106,9 @@ nav a.active {
 }
 
 .footer {
-  margin-left: 240px;
   background: #024b5f;
-    border-top: 2px solid #e2e8f0;
-  color: #e2e8f0;
+  color: #eee;
   text-align: center;
-  padding: 1rem;
-  font-size: 0.95rem;
-  position: fixed;
-  left:0;
-  bottom: 0;
-  width: 100vw;
-  box-shadow: 0 -2px 6px rgba(0,0,0,0.2);
+  padding: 6px 10px;
+  font-size: 0.8rem;
 }

@@ -29,30 +29,15 @@ function Checkout() {
     setCart(cart.filter((p) => p.id !== id));
   };
 
-  const handleRestock = (product) => {
-    const qty = parseInt(
-      prompt(`Enter quantity to restock for "${product.name}":`, 1)
-    );
-
-    if (!isNaN(qty) && qty > 0) {
-      const newQuantity = product.quantity + qty;
-      updateProduct(product.id, { quantity: newQuantity });
-    }
-  };
-
   const completeSale = () => {
-    const updatedProducts = products.map((p) => {
+    // Reduce stock
+    products.forEach((p) => {
       const soldItem = cart.find((c) => c.id === p.id);
       if (soldItem) {
-        return { ...p, quantity: p.quantity - soldItem.quantity };
+        const newQuantity = p.quantity - soldItem.quantity;
+        updateProduct(p.id, { quantity: newQuantity });
       }
-      return p;
     });
-
-    // Update products stock
-    updatedProducts.forEach((p) =>
-      updateProduct(p.id, { quantity: p.quantity })
-    );
 
     // Add sales records
     cart.forEach((item) => {
@@ -86,7 +71,6 @@ function Checkout() {
               <th>Price (M)</th>
               <th>Stock</th>
               <th>Add</th>
-              <th>Restock</th>
             </tr>
           </thead>
           <tbody>
@@ -102,11 +86,6 @@ function Checkout() {
                     disabled={p.quantity <= 0}
                   >
                     Add to Cart
-                  </button>
-                </td>
-                <td>
-                  <button onClick={() => handleRestock(p)} className="restock-btn">
-                    Restock
                   </button>
                 </td>
               </tr>

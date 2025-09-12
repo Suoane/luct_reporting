@@ -13,10 +13,11 @@ function ProductTable({ products, onDelete, onUpdate }) {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    // Prevent NaN when input is cleared
     const parsedValue =
-      name === "price" || name === "quantity" ? Number(value) : value;
-
-    console.log(`Changed ${name}:`, parsedValue, typeof parsedValue);
+      (name === "price" || name === "quantity") && value !== ""
+        ? Number(value)
+        : value;
 
     setEditForm((prev) => ({
       ...prev,
@@ -25,9 +26,21 @@ function ProductTable({ products, onDelete, onUpdate }) {
   };
 
   const handleSave = () => {
-    console.log("Saving product:", editForm);
     onUpdate(editingId, editForm);
     setEditingId(null);
+  };
+
+  const handleRestock = (product) => {
+    const qty = parseInt(
+      prompt(`Enter quantity to restock for "${product.name}":`, 1)
+    );
+    if (!isNaN(qty) && qty > 0) {
+      const newQuantity = Number(product.quantity) + qty;
+      onUpdate(product.id, { quantity: newQuantity });
+      alert(
+        `"${product.name}" restocked successfully. New quantity: ${newQuantity}`
+      );
+    }
   };
 
   return (
@@ -49,7 +62,7 @@ function ProductTable({ products, onDelete, onUpdate }) {
                 <input
                   type="text"
                   name="name"
-                  value={editForm.name}
+                  value={editForm.name || ""}
                   onChange={handleChange}
                 />
               ) : (
@@ -61,7 +74,7 @@ function ProductTable({ products, onDelete, onUpdate }) {
                 <input
                   type="text"
                   name="category"
-                  value={editForm.category}
+                  value={editForm.category || ""}
                   onChange={handleChange}
                 />
               ) : (
@@ -73,7 +86,7 @@ function ProductTable({ products, onDelete, onUpdate }) {
                 <input
                   type="number"
                   name="price"
-                  value={editForm.price}
+                  value={editForm.price || ""}
                   onChange={handleChange}
                 />
               ) : (
@@ -85,7 +98,7 @@ function ProductTable({ products, onDelete, onUpdate }) {
                 <input
                   type="number"
                   name="quantity"
-                  value={editForm.quantity}
+                  value={editForm.quantity || ""}
                   onChange={handleChange}
                 />
               ) : (
@@ -101,6 +114,7 @@ function ProductTable({ products, onDelete, onUpdate }) {
               ) : (
                 <>
                   <button onClick={() => handleEdit(p)}>Edit</button>
+                  <button onClick={() => handleRestock(p)}>Restock</button>
                   <button onClick={() => onDelete(p.id)}>Delete</button>
                 </>
               )}

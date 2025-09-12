@@ -8,9 +8,15 @@ function Inventory() {
   const allProducts = liveProducts;
 
   const handleRestock = (product) => {
-    const qty = parseInt(prompt(`Enter quantity to restock for "${product.name}":`, 1));
+    const qty = parseInt(
+      prompt(`Enter quantity to restock for "${product.name}":`, 1)
+    );
     if (!isNaN(qty) && qty > 0) {
-      updateProduct(product.id, qty);
+      const newQuantity = Number(product.quantity) + qty;
+      updateProduct(product.id, { quantity: newQuantity });
+      alert(
+        `"${product.name}" restocked successfully. New quantity: ${newQuantity}`
+      );
     }
   };
 
@@ -35,11 +41,26 @@ function Inventory() {
                 <td>{p.category}</td>
                 <td>
                   {p.quantity < 5 ? (
-                    <span className={`stock-badge ${p.quantity <= 0 ? 'out-stock' : p.quantity < 5 ? 'low-stock' : 'medium-stock'}`}>
-                      {p.quantity} {p.quantity <= 0 ? '(Out)' : p.quantity < 5 ? '(Low)' : '(Medium)'}
+                    <span
+                      className={`stock-badge ${
+                        p.quantity <= 0
+                          ? "out-stock"
+                          : p.quantity < 5
+                          ? "low-stock"
+                          : "medium-stock"
+                      }`}
+                    >
+                      {p.quantity}{" "}
+                      {p.quantity <= 0
+                        ? "(Out)"
+                        : p.quantity < 5
+                        ? "(Low)"
+                        : "(Medium)"}
                     </span>
                   ) : (
-                    <span className="stock-badge high-stock">{p.quantity} (High)</span>
+                    <span className="stock-badge high-stock">
+                      {p.quantity} (High)
+                    </span>
                   )}
                 </td>
                 <td>

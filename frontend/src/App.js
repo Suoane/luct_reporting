@@ -42,7 +42,7 @@ function App() {
             </div>
           </div>
 
-         
+         <Footer />
         </Router>
       </SalesProvider>
     </ProductProvider>

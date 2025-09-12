@@ -15,7 +15,6 @@ function Dashboard() {
   const totalProducts = allProducts.length;
   const lowStock = allProducts.filter((p) => p.quantity < 5).length;
 
-  
   const today = new Date().toISOString().split("T")[0];
   const todaysSales = sales.filter((s) => s.date.startsWith(today));
   const totalSalesAmount = todaysSales.reduce(
@@ -40,17 +39,21 @@ function Dashboard() {
     const qty = parseInt(
       prompt(`Enter quantity to restock for "${product.name}":`, 1)
     );
+
     if (!isNaN(qty) && qty > 0) {
-      updateProduct(product.id, qty);
+      const newQuantity = product.quantity + qty;
+      updateProduct(product.id, { quantity: newQuantity });
     }
   };
 
   return (
     <div className="dashboard">
       <h1>Welcome to Wings Cafe Stock Management</h1>
-      <p className="dashboard-subtitle">Here is a Quick overview, for info on our products visit the Inventory tab.</p>
+      <p className="dashboard-subtitle">
+        Here is a Quick overview, for info on our products visit the Inventory
+        tab.
+      </p>
 
-      
       <div className="dashboard-cards">
         <div className="dash-card inventory-card">
           <h2>Inventory</h2>
@@ -79,7 +82,6 @@ function Dashboard() {
         </div>
       </div>
 
-      
       <div className="specials">
         <h2>Today's Specials</h2>
         <div className="special-items-cards">

@@ -4,12 +4,10 @@ import { SalesContext } from "../context/SalesContext";
 import "./Checkout.css";
 
 function Checkout() {
-  
-  const { products, updateProducts } = useContext(ProductContext);
+  const { products, updateProduct } = useContext(ProductContext);
   const { addSale } = useContext(SalesContext);
   const [cart, setCart] = useState([]);
 
-  
   const addToCart = (product) => {
     const cartItem = cart.find((p) => p.id === product.id);
     const cartQty = cartItem ? cartItem.quantity : 0;
@@ -27,12 +25,21 @@ function Checkout() {
     }
   };
 
-  
   const removeFromCart = (id) => {
     setCart(cart.filter((p) => p.id !== id));
   };
 
-  
+  const handleRestock = (product) => {
+    const qty = parseInt(
+      prompt(`Enter quantity to restock for "${product.name}":`, 1)
+    );
+
+    if (!isNaN(qty) && qty > 0) {
+      const newQuantity = product.quantity + qty;
+      updateProduct(product.id, { quantity: newQuantity });
+    }
+  };
+
   const completeSale = () => {
     const updatedProducts = products.map((p) => {
       const soldItem = cart.find((c) => c.id === p.id);
@@ -42,10 +49,12 @@ function Checkout() {
       return p;
     });
 
-    
-    updateProducts(updatedProducts);
+    // Update products stock
+    updatedProducts.forEach((p) =>
+      updateProduct(p.id, { quantity: p.quantity })
+    );
 
-    
+    // Add sales records
     cart.forEach((item) => {
       const sale = {
         productId: item.id,
@@ -61,15 +70,12 @@ function Checkout() {
     alert("Sale completed!");
   };
 
-  
   const total = cart.reduce((sum, p) => sum + p.price * p.quantity, 0);
 
   return (
-    <>
     <div className="checkout">
       <h1>Checkout</h1>
 
-      
       <div className="checkout-products">
         <h2>Available Products</h2>
         <table>
@@ -80,6 +86,7 @@ function Checkout() {
               <th>Price (M)</th>
               <th>Stock</th>
               <th>Add</th>
+              <th>Restock</th>
             </tr>
           </thead>
           <tbody>
@@ -97,13 +104,17 @@ function Checkout() {
                     Add to Cart
                   </button>
                 </td>
+                <td>
+                  <button onClick={() => handleRestock(p)} className="restock-btn">
+                    Restock
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* Cart */}
       <div className="checkout-cart">
         <h2>Cart</h2>
         {cart.length === 0 ? (
@@ -138,10 +149,6 @@ function Checkout() {
         </button>
       </div>
     </div>
-   
-
-    </>
-
   );
 }
 

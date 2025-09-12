@@ -4,14 +4,14 @@
     "name": "Grilled Pork",
     "category": "Food",
     "price": "20",
-    "quantity": 1
+    "quantity": 25
   },
   {
     "id": 1757512240203,
     "name": "Chicken and Rice",
     "category": "Food",
     "price": "20",
-    "quantity": 7
+    "quantity": 43
   },
   {
     "id": 1757512258535,

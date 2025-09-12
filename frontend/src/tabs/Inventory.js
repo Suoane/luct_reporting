@@ -1,18 +1,22 @@
 import { useContext } from "react";
 import { ProductContext } from "../context/ProductContext";
-import staticProducts from "../data/products.json";
 import "./Inventory.css";
 
 function Inventory() {
-  const { products: liveProducts } = useContext(ProductContext);
+  const { products: liveProducts, updateProduct } = useContext(ProductContext);
 
-  
-  const allProducts = [...staticProducts, ...liveProducts];
+  const allProducts = liveProducts;
+
+  const handleRestock = (product) => {
+    const qty = parseInt(prompt(`Enter quantity to restock for "${product.name}":`, 1));
+    if (!isNaN(qty) && qty > 0) {
+      updateProduct(product.id, qty);
+    }
+  };
 
   return (
     <div className="inventory">
       <h1>Inventory Management</h1>
-
       <div>
         <h2>Inventory</h2>
         <table>
@@ -21,6 +25,7 @@ function Inventory() {
               <th>Product</th>
               <th>Category</th>
               <th>Quantity</th>
+              <th>Restock</th>
             </tr>
           </thead>
           <tbody>
@@ -30,12 +35,15 @@ function Inventory() {
                 <td>{p.category}</td>
                 <td>
                   {p.quantity < 5 ? (
-                    <span className="stock-badge low-stock">{p.quantity} (Low)</span>
-                  ) : p.quantity < 20 ? (
-                    <span className="stock-badge medium-stock">{p.quantity} (Medium)</span>
+                    <span className={`stock-badge ${p.quantity <= 0 ? 'out-stock' : p.quantity < 5 ? 'low-stock' : 'medium-stock'}`}>
+                      {p.quantity} {p.quantity <= 0 ? '(Out)' : p.quantity < 5 ? '(Low)' : '(Medium)'}
+                    </span>
                   ) : (
                     <span className="stock-badge high-stock">{p.quantity} (High)</span>
                   )}
+                </td>
+                <td>
+                  <button onClick={() => handleRestock(p)}>Restock</button>
                 </td>
               </tr>
             ))}

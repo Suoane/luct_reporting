@@ -1,0 +1,123 @@
+.page-container {
+  background: linear-gradient(135deg, #1a1a1a, #2b1a2b);
+  color: #f8f0e3;
+  padding: 20px;
+  font-family: "Cinzel", serif;
+  min-height: 100vh;
+}
+
+h1, h2 {
+  color: #f2b632;
+  text-shadow: 2px 2px 4px #000;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background: rgba(0,0,0,0.6);
+}
+
+th, td {
+  border: 1px solid #444;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #3e1a3e;
+  color: #f2b632;
+}
+
+tr:hover {
+  background-color: rgba(242, 182, 50, 0.2);
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  background: #222;
+  border: 1px solid #555;
+  color: #f8f0e3;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #f2b632;
+  color: #1a1a1a;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #e6a600;
+}
+
+.info {
+  margin-top: 10px;
+  color: #4ade80;
+}
+.page-container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.student-nav {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.student-nav button {
+  padding: 10px 15px;
+  border: 1px solid #333;
+  background: white;
+  cursor: pointer;
+}
+
+.student-nav button.active {
+  background: #333;
+  color: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.attendance-form, .rating-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.attendance-form select, .attendance-form input,
+.rating-form select, .rating-form input, .rating-form textarea {
+  padding: 5px;
+  min-width: 150px;
+}
+
+button {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.info {
+  color: green;
+  font-weight: bold;
+  margin-bottom: 10px;
+}

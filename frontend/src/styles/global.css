@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative&display=swap');
+
+body {
+  margin: 0;
+ font-family: 'Cinzel', 'Georgia', serif;
+  background: #0b0c10;
+  color: #e0dfe2;
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: #9f7aea; 
+  transition: 0.3s;
+}
+
+a:hover {
+  color: #f9a8d4; 
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Cinzel Decorative', serif;
+  text-shadow: 0 0 10px #6b21a8, 0 0 20px #9f7aea;
+}

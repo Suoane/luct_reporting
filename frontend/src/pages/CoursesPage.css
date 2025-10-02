@@ -1,0 +1,11 @@
+.courses-page {
+  padding: 2rem;
+  min-height: 80vh;
+  background: radial-gradient(circle at bottom, #0b0c10, #1a1a2e);
+}
+
+.courses-page h1 {
+  font-size: 2.2rem;
+  color: #f3e8ff;
+  text-shadow: 0 0 15px #9f7aea;
+}

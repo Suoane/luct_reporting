@@ -1,0 +1,145 @@
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  background: radial-gradient(circle at top, #0b0c10, #1a1a2e);
+  padding: 2rem;
+  text-align: center;
+  color: #fff;
+}
+
+.login-page h1,
+.login-page h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #f0f0f0;
+}
+
+.login-page p {
+  font-size: 1.2rem;
+  color: #aaa;
+}
+
+.login-page input,
+.login-page select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  margin: 0.5rem 0;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background-color: #1a1a2e;
+  color: #fff;
+}
+
+.login-page input::placeholder,
+.login-page select::placeholder {
+  color: #888;
+}
+
+.login-page button {
+  margin-top: 1rem;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #60a5fa;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-page button:hover {
+  background-color: #3b82f6;
+}
+
+.toggle-register {
+  margin-top: 1rem;
+  cursor: pointer;
+  color: #60a5fa;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding: 0.8rem 2.5rem 0.8rem 1rem; /* keep height consistent, extra right padding for icon */
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background-color: #1a1a2e;
+  color: #fff;
+}
+
+.password-icon {
+  position: absolute;
+  right: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #aaa;
+  font-size: 1.2rem;
+  transition: color 0.3s;
+}
+
+.password-icon:hover {
+  color: #60a5fa;
+}
+
+.success {
+  color: #4ade80;
+}
+
+.error {
+  color: #f87171;
+}
+
+.register-form label {
+  display: block;
+  text-align: left;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.role-select,
+.register-form select {
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  background-color: #1a1a2e;
+  color: #fff;
+}
+.registration-success-animation {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 15px;
+  text-align: center;
+  z-index: 9999;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.registration-success-animation .anime-animation {
+  width: 150px;
+  height: auto;
+  margin-bottom: 1rem;
+  animation: bounce 1s infinite alternate;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-15px); }
+}

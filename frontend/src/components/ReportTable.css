@@ -2,10 +2,12 @@
   max-width: 1000px;
   margin: 2rem auto;
   padding: 2rem;
-  background: linear-gradient(145deg, #1b1b1b, #2a1f2d);
-  color: #f3e9dc;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(200, 100, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
 }
 
 .report-table-container h2 {

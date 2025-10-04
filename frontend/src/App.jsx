@@ -9,26 +9,40 @@ import LecturerPage from "./components/LecturerPage";
 import PrincipalLecturer from "./components/PrincipalLecturer";
 import ProgramLeader from "./components/ProgramLeader";
 import AdminPage from "./components/AdminPage";
+import ClassesList from "./components/ClassesList";
+import ClassDetail from "./components/ClassDetail";
 
 export default function App() {
   // ==================== USER STATE ====================
   const [user, setUser] = useState(() => {
-    const rawUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
-    return rawUser ? { ...JSON.parse(rawUser), token } : null;
+    try {
+      const rawUser = localStorage.getItem("user");
+      const token = localStorage.getItem("token");
+      if (!rawUser || !token) {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        return null;
+      }
+      return { ...JSON.parse(rawUser), token };
+    } catch (error) {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      return null;
+    }
   });
 
   useEffect(() => {
+    // Clear any invalid state
     if (!user) {
-      const rawUser = localStorage.getItem("user");
-      const token = localStorage.getItem("token");
-      if (rawUser && token) setUser({ ...JSON.parse(rawUser), token });
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
     }
-  }, []);
+  }, [user]);
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    // Clear all auth-related data
+    localStorage.clear();
+    sessionStorage.clear();
     setUser(null);
   };
 
@@ -86,6 +100,24 @@ export default function App() {
           element={
             <ProtectedRoute user={user} allowedRoles={["admin"]}>
               <AdminPage user={user} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/classes"
+          element={
+            <ProtectedRoute user={user} allowedRoles={["lecturer", "prl", "pl"]}>
+              <ClassesList user={user} />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/classes/:moduleId"
+          element={
+            <ProtectedRoute user={user} allowedRoles={["lecturer", "prl", "pl"]}>
+              <ClassDetail user={user} />
             </ProtectedRoute>
           }
         />

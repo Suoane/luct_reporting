@@ -2,23 +2,37 @@
 
 body {
   margin: 0;
- font-family: 'Cinzel', 'Georgia', serif;
-  background: #0b0c10;
-  color: #e0dfe2;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(135deg, #1a1f2c 0%, #121620 100%);
+  color: #ffffff;
   line-height: 1.6;
+  min-height: 100vh;
 }
 
 a {
   text-decoration: none;
-  color: #9f7aea; 
+  color: #ED1C24;
   transition: 0.3s;
 }
 
 a:hover {
-  color: #f9a8d4; 
+  color: #ff464e;
+  text-shadow: 0 0 10px rgba(237, 28, 36, 0.3);
 }
 
 h1, h2, h3, h4 {
-  font-family: 'Cinzel Decorative', serif;
-  text-shadow: 0 0 10px #6b21a8, 0 0 20px #9f7aea;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  font-weight: 600;
+}
+
+/* Add some global dark theme styles */
+input, select, textarea, button {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+::selection {
+  background: rgba(237, 28, 36, 0.3);
+  color: #ffffff;
 }

@@ -1,12 +1,16 @@
 .navbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: flex-end;
-  padding: 8px 20px;
-  background: linear-gradient(90deg, #1a1a1a, #2b1a2b);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.7);
-  font-family: "Cinzel", serif;
-  width: 100%;
+  gap: 20px;
+  padding: 12px 24px;
+  background: linear-gradient(90deg, #1a1f2c 0%, #121620 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .navbar-logo {
@@ -41,19 +45,99 @@
 }
 
 .logout-btn {
-  background-color: transparent;
-  color: #f8f0e3;
-  border: 1px solid #f8f0e3;
-  padding: 4px 10px;
+  background-color: rgba(237, 28, 36, 0.1);
+  color: #ED1C24;
+  border: 1px solid #ED1C24;
+  padding: 8px 16px;
   cursor: pointer;
-  font-size: 0.8rem;
-  border-radius: 3px;
-  transition: all 0.2s ease;
-  margin-left: auto;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logout-btn:hover {
-  background-color: rgba(248, 240, 227, 0.1);
-  border-color: #f2b632;
+  background-color: #ED1C24;
+  border-color: #ED1C24;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(237, 28, 36, 0.3);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+  flex: 1;
+  max-width: 60%;
+  overflow: hidden;
+}
+
+.nav-links a {
+  color: #f8f0e3;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.nav-links a:hover {
+  background-color: rgba(242, 182, 50, 0.1);
   color: #f2b632;
+  transform: translateY(-1px);
+}
+
+.nav-links a.active {
+  background-color: rgba(242, 182, 50, 0.2);
+  color: #f2b632;
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  max-width: 300px;
+  overflow: hidden;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  height: 38px;
+}
+
+.user-profile:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.user-icon {
+  color: #f8f0e3;
+  font-size: 1rem;
+}
+
+.username {
+  color: #f8f0e3;
+  font-size: 0.9rem;
+  font-weight: 500;
 }

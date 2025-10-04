@@ -8,15 +8,17 @@ export default function MonitoringComponent({ user, authHeaders }) {
   const [msg, setMsg] = useState("");
 
   useEffect(() => {
-    const fetchModules = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/student/modules", { headers: authHeaders() });
-        const data = await res.json();
-        setModules(data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
+      const fetchModules = async () => {
+        try {
+          // Assume user.program_id is available (from user object)
+          if (!user || !user.program_id) return;
+          const res = await fetch(`http://localhost:5000/api/student/modules/${user.program_id}`, { headers: authHeaders() });
+          const data = await res.json();
+          setModules(data);
+        } catch (err) {
+          console.error(err);
+        }
+      };
     const fetchAttendance = async () => {
       try {
         const res = await fetch("http://localhost:5000/api/student/attendance", { headers: authHeaders() });
@@ -82,6 +84,12 @@ export default function MonitoringComponent({ user, authHeaders }) {
           ))}
         </tbody>
       </table>
+
+  <h3>Send Complaint/Report to Principal Lecturer</h3>
+  <ComplaintForm user={user} authHeaders={authHeaders} />
+
+  <h3>Your Complaint/Report Responses</h3>
+  <ComplaintResponses user={user} authHeaders={authHeaders} />
     </div>
   );
 }

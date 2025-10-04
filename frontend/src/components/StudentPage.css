@@ -1,21 +1,28 @@
 .page-container {
   background: linear-gradient(135deg, #1a1a1a, #2b1a2b);
-  color: #f8f0e3;
+  color: #ffffff;
   padding: 20px;
   font-family: "Cinzel", serif;
   min-height: 100vh;
+  position: relative;
 }
 
 h1, h2 {
-  color: #f2b632;
-  text-shadow: 2px 2px 4px #000;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
-  background: rgba(0,0,0,0.6);
+  margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 th, td {
@@ -37,10 +44,25 @@ input, select, textarea {
   width: 100%;
   padding: 8px;
   margin: 5px 0;
-  background: #222;
-  border: 1px solid #555;
-  color: #f8f0e3;
+  background: rgba(40, 40, 40, 0.95);
+  border: 1px solid #666;
+  color: #ffffff;
   border-radius: 4px;
+}
+
+select {
+  background-color: #282828;
+  color: #ffffff;
+}
+
+select option {
+  background-color: #282828;
+  color: #ffffff;
+  padding: 8px;
+}
+
+select option[value=""] {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 button {
@@ -62,10 +84,11 @@ button:hover {
   color: #4ade80;
 }
 .page-container {
-  max-width: 1000px;
+  max-width: 100%;
   margin: auto;
   padding: 20px;
   font-family: Arial, sans-serif;
+  overflow-x: hidden;
 }
 
 .student-nav {
@@ -76,20 +99,33 @@ button:hover {
 
 .student-nav button {
   padding: 10px 15px;
-  border: 1px solid #333;
-  background: white;
+  border: 1px solid #f2b632;
+  background: transparent;
+  color: #f2b632;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .student-nav button.active {
-  background: #333;
-  color: white;
+  background: #f2b632;
+  color: #1a1a1a;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media screen and (max-width: 768px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 }
 
 table th, table td {
@@ -98,17 +134,66 @@ table th, table td {
   text-align: left;
 }
 
-.attendance-form, .rating-form {
+.attendance-form {
   display: flex;
+  align-items: center;
   gap: 10px;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.attendance-form select, .attendance-form input,
+.rating-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.attendance-form select, .attendance-form input {
+  padding: 8px 12px;
+  width: 100%;
+  min-width: 200px;
+  border-radius: 4px;
+  border: 1px solid #666;
+  background: #282828;
+  color: #ffffff;
+  flex: 1;
+}
+
+.attendance-form select option {
+  color: #ffffff;
+  background: #282828;
+}
+
+.attendance-form select option[value=""] {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.attendance-form button {
+  margin: 0;
+  height: 40px;
+  padding: 0 20px;
+  white-space: nowrap;
+}
+
 .rating-form select, .rating-form input, .rating-form textarea {
-  padding: 5px;
-  min-width: 150px;
+  padding: 8px;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #666;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.rating-form textarea {
+  grid-column: 1 / -1;
+  min-height: 100px;
+  resize: vertical;
 }
 
 button {

@@ -1,0 +1,133 @@
+.class-detail {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.class-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.class-header h2 {
+  margin: 0 0 10px 0;
+  color: #2d3748;
+}
+
+.code {
+  display: inline-block;
+  background: #f0f4f8;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin: 0 0 10px 0;
+}
+
+.faculty {
+  color: #718096;
+  margin: 0;
+}
+
+.student-count {
+  text-align: center;
+  background: #f7fafc;
+  padding: 15px;
+  border-radius: 6px;
+  min-width: 150px;
+}
+
+.student-count .label {
+  display: block;
+  font-size: 0.9rem;
+  color: #718096;
+  margin-bottom: 5px;
+}
+
+.student-count .value {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.attendance-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.attendance-section h3 {
+  margin: 0 0 20px 0;
+  color: #2d3748;
+}
+
+.attendance-table {
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.table-header, .table-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  padding: 12px;
+  gap: 10px;
+}
+
+.table-header {
+  background: #f7fafc;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.table-row {
+  border-bottom: 1px solid #edf2f7;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.percentage {
+  color: #48bb78;
+  font-weight: 500;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.action-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #4299e1;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.action-button:hover {
+  background: #3182ce;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 40px;
+  color: #4a5568;
+}
+
+.error {
+  color: #e53e3e;
+}

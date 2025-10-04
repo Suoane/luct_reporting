@@ -1,8 +1,8 @@
 .page-container {
-  background: linear-gradient(135deg, #1a1a1a, #191a2b);
-  color: #f8f0e3;
-  padding: 20px;
-  font-family: "Cinzel", serif;
+  background: linear-gradient(135deg, #1a1f2c 0%, #121620 100%);
+  color: #ffffff;
+  padding: 2rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   min-height: 100vh;
 }
 

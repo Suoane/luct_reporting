@@ -1,7 +1,9 @@
 .reports-page {
   padding: 2rem;
-  background: linear-gradient(to bottom, #0b0c10, #1a1a2e);
-  min-height: 80vh;
+  background: linear-gradient(135deg, #1a1f2c 0%, #121620 100%);
+  min-height: 100vh;
+  color: #ffffff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
 .reports-page h1 {

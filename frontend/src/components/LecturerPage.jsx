@@ -162,7 +162,6 @@ export default function LecturerPage({ user }) {
         <div className="class-card">
           <div className="class-header">
             <h3>{lecturerInfo.stream_name}</h3>
-            <span className="stream-code">{lecturerInfo.stream_code}</span>
           </div>
           <div className="class-details">
             <div className="detail-row">
@@ -195,57 +194,23 @@ export default function LecturerPage({ user }) {
     );
   };
 
-  const renderPrograms = () => {
-    if (programs.length === 0) return <div className="no-data">No programs assigned</div>;
+ const renderPrograms = () => {
+  if (programs.length === 0) return null;
 
-    const programsByFaculty = programs.reduce((acc, prog) => {
-      if (!acc[prog.faculty_code]) {
-        acc[prog.faculty_code] = {
-          faculty_name: prog.faculty_name,
-          faculty_code: prog.faculty_code,
-          programs: []
-        };
-      }
-      acc[prog.faculty_code].programs.push(prog);
-      return acc;
-    }, {});
-    
-    Object.values(programsByFaculty).forEach(faculty => {
-      faculty.programs.sort((a, b) => a.program_name.localeCompare(b.program_name));
-    });
-
-    return (
-      <div className="faculties-container">
-        {Object.values(programsByFaculty).map(faculty => (
-          <div key={faculty.faculty_code} className="faculty-section">
-            <h4>{faculty.faculty_name} ({faculty.faculty_code})</h4>
-            <div className="programs-grid">
-              {faculty.programs.map(prog => (
-                <div key={prog.id} className="program-card">
-                  <div className="program-header">
-                    <h5>{prog.program_name}</h5>
-                  </div>
-                  <div className="program-details">
-                    <p><strong>Type:</strong> {prog.program_type}</p>
-                    <p><strong>Students Enrolled:</strong> {prog.enrolled_students || 0}</p>
-                    <p><strong>Your Modules:</strong></p>
-                    <ul className="module-list">
-                      {prog.module_codes.map((code, index) => (
-                        <li key={code}>{code} - {prog.module_names[index]}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="program-actions">
-                    <button onClick={() => handleProgramSelect(prog.id)}>View Details</button>
-                  </div>
-                </div>
-              ))}
-            </div>
+  return (
+    <div className="faculties-container">
+      {programs.map((prog, index) => (
+        <div key={`${prog.faculty_name}-${index}`} className="faculty-section">
+          <h4>{prog.faculty_name}</h4>
+          <div className="module-info">
+            <p><strong>Your Module:</strong> {prog.module_name || 'Not assigned'}</p>
+            <p><strong>Module Code:</strong> {prog.module_code || 'N/A'}</p>
           </div>
-        ))}
-      </div>
-    );
-  };
+        </div>
+      ))}
+    </div>
+  );
+};
 
   const handleProgramSelect = async (programId) => {
     try {

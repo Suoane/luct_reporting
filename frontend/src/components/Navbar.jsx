@@ -30,32 +30,8 @@ export default function Navbar({ setUser }) {
           <div className="nav-links">
             {user.role === 'student' && null}
             {user.role === 'lecturer' && null}
-            {user.role === 'prl' && (
-              <>
-                <NavLink to="/prl" className={({ isActive }) => isActive ? 'active' : ''}>
-                  My Portal
-                </NavLink>
-                <NavLink to="/classes" className={({ isActive }) => isActive ? 'active' : ''}>
-                  My Classes
-                </NavLink>
-                <NavLink to="/reports" className={({ isActive }) => isActive ? 'active' : ''}>
-                  Reports
-                </NavLink>
-              </>
-            )}
-            {user.role === 'pl' && (
-              <>
-                <NavLink to="/pl" className={({ isActive }) => isActive ? 'active' : ''}>
-                  My Portal
-                </NavLink>
-                <NavLink to="/classes" className={({ isActive }) => isActive ? 'active' : ''}>
-                  My Classes
-                </NavLink>
-                <NavLink to="/reports" className={({ isActive }) => isActive ? 'active' : ''}>
-                  Reports
-                </NavLink>
-              </>
-            )}
+            {user.role === 'prl' && null}
+            {user.role === 'pl' && null}
             {user.role === 'admin' && null}
           </div>
           <button className="logout-btn" onClick={handleLogout}>

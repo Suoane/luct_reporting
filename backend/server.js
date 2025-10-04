@@ -184,7 +184,6 @@ app.get("/api/lecturer/info", authenticateToken, checkRole(["lecturer"]), async 
         l.stream_id,
         l.module_id,
         s.name as stream_name,
-        s.code as stream_code,
         m.name as module_name,
         m.code as module_code
       FROM lecturers l
@@ -218,7 +217,7 @@ app.get("/api/lecturer/faculties", authenticateToken, checkRole(["lecturer"]), a
     const stream_id = lecturerResult.rows[0].stream_id;
 
     const facultyResult = await pool.query(
-      `SELECT s.id, s.name, s.code, 
+      `SELECT s.id, s.name,
               COALESCE(json_agg(
                 json_build_object('id', m.id, 'name', m.name, 'code', m.code)
                 ORDER BY m.name
@@ -226,7 +225,7 @@ app.get("/api/lecturer/faculties", authenticateToken, checkRole(["lecturer"]), a
        FROM streams s
        LEFT JOIN modules m ON m.stream_id = s.id
        WHERE s.id = $1
-       GROUP BY s.id, s.name, s.code`,
+       GROUP BY s.id, s.name`,
       [stream_id]
     );
 
@@ -236,6 +235,7 @@ app.get("/api/lecturer/faculties", authenticateToken, checkRole(["lecturer"]), a
     res.status(500).json({ success: false, message: "Error fetching faculties" });
   }
 });
+
 
 // LECTURER ATTENDANCE
 app.get("/api/lecturer/attendance", authenticateToken, checkRole(["lecturer"]), async (req, res) => {
@@ -782,7 +782,7 @@ app.get("/api/reports", authenticateToken, async (req, res) => {
 app.get("/api/lecturer/reports", authenticateToken, checkRole(["lecturer"]), async (req, res) => {
   try {
     const lecturerResult = await pool.query(
-      "SELECT l.id, CONCAT(l.name, ' ', l.surname) as full_name FROM lecturers l WHERE l.username = $1",
+      "SELECT l.id, l.name || ' ' || l.surname as full_name FROM lecturers l WHERE l.username = $1",
       [req.user.username]
     );
 
@@ -1076,7 +1076,6 @@ app.get("/api/lecturer/programs", authenticateToken, checkRole(["lecturer"]), as
       SELECT 
         s.id as stream_id,
         s.name as faculty_name,
-        s.code as faculty_code,
         m.code as module_code,
         m.name as module_name,
         array_agg(m.code) as module_codes,
@@ -1084,7 +1083,7 @@ app.get("/api/lecturer/programs", authenticateToken, checkRole(["lecturer"]), as
       FROM streams s
       LEFT JOIN modules m ON m.stream_id = s.id AND m.id = $2
       WHERE s.id = $1
-      GROUP BY s.id, s.name, s.code, m.code, m.name
+      GROUP BY s.id, s.name, m.code, m.name
     `, [stream_id, module_id]);
 
     res.json({ success: true, programs: result.rows });
@@ -1121,6 +1120,35 @@ app.get("/api/lecturers/student/stream/regular", authenticateToken, checkRole(["
   } catch (err) {
     console.error("Error fetching lecturers:", err);
     res.status(500).json({ success: false, message: "Error fetching lecturers" });
+  }
+});
+
+// GET STUDENT COUNT BY STREAM
+app.get("/api/lecturer/student-count", authenticateToken, checkRole(["lecturer"]), async (req, res) => {
+  try {
+    const lecturerResult = await pool.query(
+      "SELECT stream_id FROM lecturers WHERE username=$1",
+      [req.user.username]
+    );
+
+    if (lecturerResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: "Lecturer not found" });
+    }
+
+    const stream_id = lecturerResult.rows[0].stream_id;
+
+    const countResult = await pool.query(
+      "SELECT COUNT(*) as total FROM students WHERE faculty_id=$1",
+      [stream_id]
+    );
+
+    res.json({ 
+      success: true, 
+      total_students: parseInt(countResult.rows[0].total) 
+    });
+  } catch (err) {
+    console.error("Error fetching student count:", err);
+    res.status(500).json({ success: false, message: "Error fetching student count" });
   }
 });
 

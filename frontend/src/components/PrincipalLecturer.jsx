@@ -9,6 +9,14 @@ export default function PrincipalLecturer({ user }) {
   const [feedbacks, setFeedbacks] = useState({});
   const [replies, setReplies] = useState({});
   const [msg, setMsg] = useState("");
+  const [pendingCount, setPendingCount] = useState(0);
+  const [unreadReportsCount, setUnreadReportsCount] = useState(0);
+  const [newRatingsCount, setNewRatingsCount] = useState(0);
+  const [viewedTabs, setViewedTabs] = useState({
+    reports: false,
+    complaints: false,
+    ratings: false
+  });
 
   const authHeaders = () => ({
     "Content-Type": "application/json",
@@ -22,55 +30,99 @@ export default function PrincipalLecturer({ user }) {
           headers: authHeaders() 
         });
         const data = await res.json();
-        setReports(Array.isArray(data) ? data : data.reports || []);
+        const reportsList = Array.isArray(data) ? data : data.reports || [];
+        setReports(reportsList);
+        
+        // Only show badge if tab hasn't been viewed yet
+        if (!viewedTabs.reports) {
+          const unread = reportsList.filter(r => !r.feedback || r.feedback.trim() === '').length;
+          setUnreadReportsCount(unread);
+        }
       } catch (err) {
         console.error("Error fetching reports:", err);
         setReports([]);
+        setUnreadReportsCount(0);
       }
     };
+    
     fetchReports();
+    const interval = setInterval(fetchReports, 30000);
+    return () => clearInterval(interval);
+  }, [viewedTabs.reports]);
+
+  useEffect(() => {
+    const fetchComplaints = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/complaints/prl", {
+          headers: authHeaders()
+        });
+        const data = await res.json();
+        const complaintsList = data.success && Array.isArray(data.complaints) ? data.complaints : [];
+        setComplaints(complaintsList);
+        
+        // Always show pending complaints count (action-based, not view-based)
+        const pending = complaintsList.filter(c => c.status === 'pending').length;
+        setPendingCount(pending);
+      } catch (err) {
+        console.error("Error fetching complaints:", err);
+        setComplaints([]);
+        setPendingCount(0);
+      }
+    };
+    
+    fetchComplaints();
+    const interval = setInterval(fetchComplaints, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    if (activeTab === "complaints") {
-      const fetchComplaints = async () => {
-        try {
-          const res = await fetch("http://localhost:5000/api/complaints/prl", {
-            headers: authHeaders()
+    const fetchRatings = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/ratings/prl", {
+          headers: authHeaders()
+        });
+        const data = await res.json();
+        if (data.success) {
+          const ratingsList = data.ratings || [];
+          setRatings({
+            ratings: ratingsList,
+            summary: data.summary || []
           });
-          const data = await res.json();
-          setComplaints(data.success && Array.isArray(data.complaints) ? data.complaints : []);
-        } catch (err) {
-          console.error("Error fetching complaints:", err);
-          setComplaints([]);
-        }
-      };
-      fetchComplaints();
-    }
-  }, [activeTab]);
-
-  useEffect(() => {
-    if (activeTab === "ratings") {
-      const fetchRatings = async () => {
-        try {
-          const res = await fetch("http://localhost:5000/api/ratings/prl", {
-            headers: authHeaders()
-          });
-          const data = await res.json();
-          if (data.success) {
-            setRatings({
-              ratings: data.ratings || [],
-              summary: data.summary || []
-            });
+          
+          // Only show badge if tab hasn't been viewed yet
+          if (!viewedTabs.ratings) {
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            const newRatings = ratingsList.filter(r => 
+              new Date(r.created_at) > sevenDaysAgo
+            ).length;
+            setNewRatingsCount(newRatings);
           }
-        } catch (err) {
-          console.error("Error fetching ratings:", err);
-          setRatings({ ratings: [], summary: [] });
         }
-      };
-      fetchRatings();
+      } catch (err) {
+        console.error("Error fetching ratings:", err);
+        setRatings({ ratings: [], summary: [] });
+        setNewRatingsCount(0);
+      }
+    };
+    
+    fetchRatings();
+    const interval = setInterval(fetchRatings, 30000);
+    return () => clearInterval(interval);
+  }, [viewedTabs.ratings]);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    
+    // Mark tab as viewed and clear its notification
+    if (tab === 'reports') {
+      setViewedTabs(prev => ({ ...prev, reports: true }));
+      setUnreadReportsCount(0);
+    } else if (tab === 'ratings') {
+      setViewedTabs(prev => ({ ...prev, ratings: true }));
+      setNewRatingsCount(0);
     }
-  }, [activeTab]);
+  };
 
   const submitFeedback = async (id) => {
     try {
@@ -82,10 +134,10 @@ export default function PrincipalLecturer({ user }) {
       const data = await res.json();
       if (data.success) { 
         setMsg("Feedback saved successfully"); 
-        // Update the report in state
-        setReports(prev => prev.map(r => 
+        const updatedReports = reports.map(r => 
           r.id === id ? { ...r, feedback: feedbacks[id] } : r
-        ));
+        );
+        setReports(updatedReports);
         setTimeout(() => setMsg(""), 3000);
       } else {
         setMsg(data.message || "Failed to save feedback");
@@ -106,11 +158,12 @@ export default function PrincipalLecturer({ user }) {
       if (data.success) {
         setMsg("Reply sent successfully");
         setTimeout(() => setMsg(""), 3000);
-        // Refresh complaints
+        
         const updatedComplaints = complaints.map(c =>
           c.id === id ? { ...c, status: 'resolved', reply: replies[id] } : c
         );
         setComplaints(updatedComplaints);
+        setPendingCount(prev => Math.max(0, prev - 1));
         setReplies(prev => ({ ...prev, [id]: "" }));
       } else {
         setMsg(data.message || "Failed to send reply");
@@ -118,6 +171,31 @@ export default function PrincipalLecturer({ user }) {
     } catch (err) {
       setMsg("Server error");
     }
+  };
+
+  const NotificationBadge = ({ count }) => {
+    if (count === 0) return null;
+    return (
+      <span style={{
+        position: 'absolute',
+        top: '-8px',
+        right: '-8px',
+        background: '#ff4444',
+        color: 'white',
+        borderRadius: '50%',
+        minWidth: '24px',
+        height: '24px',
+        padding: '0 6px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '12px',
+        fontWeight: 'bold',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+      }}>
+        {count}
+      </span>
+    );
   };
 
   return (
@@ -131,21 +209,27 @@ export default function PrincipalLecturer({ user }) {
       <div className="tabs">
         <button 
           className={`tab ${activeTab === 'reports' ? 'active' : ''}`}
-          onClick={() => setActiveTab('reports')}
+          onClick={() => handleTabClick('reports')}
+          style={{ position: 'relative' }}
         >
           Lecturer Reports
+          <NotificationBadge count={unreadReportsCount} />
         </button>
         <button 
           className={`tab ${activeTab === 'complaints' ? 'active' : ''}`}
-          onClick={() => setActiveTab('complaints')}
+          onClick={() => handleTabClick('complaints')}
+          style={{ position: 'relative' }}
         >
           Student Complaints
+          <NotificationBadge count={pendingCount} />
         </button>
         <button 
           className={`tab ${activeTab === 'ratings' ? 'active' : ''}`}
-          onClick={() => setActiveTab('ratings')}
+          onClick={() => handleTabClick('ratings')}
+          style={{ position: 'relative' }}
         >
           Lecturer Ratings
+          <NotificationBadge count={newRatingsCount} />
         </button>
       </div>
 

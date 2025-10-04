@@ -55,7 +55,7 @@ export default function StudentPage({ user }) {
   useEffect(() => {
     const fetchLecturers = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/lecturers/student/stream", {
+        const res = await fetch("http://localhost:5000/api/lecturers/student/stream/regular", {
           headers: authHeaders()
         });
         const data = await res.json();
@@ -156,14 +156,14 @@ export default function StudentPage({ user }) {
 
   return (
     <div className="page-container">
-      <h1>Dashboard</h1>
+      <h1>Student Dashboard</h1>
 
       <nav className="student-nav">
         <button onClick={() => setTab("monitoring")} className={tab === "monitoring" ? "active" : ""}>
-          Monitor Reports
+          Attendance & Complaints
         </button>
         <button onClick={() => setTab("rating")} className={tab === "rating" ? "active" : ""}>
-          Rating
+          Lecturer Rating
         </button>
       </nav>
 
@@ -241,7 +241,7 @@ export default function StudentPage({ user }) {
           </table>
 
           <h2>Send Complaint/Report to Principal Lecturer</h2>
-          <ComplaintForm user={user} authHeaders={authHeaders} lecturers={lecturers} />
+          <ComplaintForm user={user} authHeaders={authHeaders} />
 
           <h2>Your Complaint/Report Responses</h2>
           <ComplaintResponses user={user} authHeaders={authHeaders} />

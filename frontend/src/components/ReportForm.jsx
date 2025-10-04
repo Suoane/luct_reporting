@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import "./ReportForm.css";
 
-export default function ReportForm({ user, onSubmitted }) {
+export default function ReportForm({ user, lecturerInfo, onSubmitted }) {
   const [formData, setFormData] = useState({
     facultyName: "",
     className: "",
     weekOfReporting: "",
     dateOfLecture: "",
-    moduleName: "",
-    moduleCode: "",
-    lecturerName: user?.lecturer_info ? `${user.lecturer_info.name} ${user.lecturer_info.surname}` : "",
+    courseName: "",
+    courseCode: "",
+    lecturerName: "",
     actualStudents: "",
     totalStudents: "",
     venue: "",
@@ -19,13 +19,28 @@ export default function ReportForm({ user, onSubmitted }) {
     recommendations: "",
   });
 
-  const [faculties, setFaculties] = useState([]);
   const [modules, setModules] = useState([]);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // Fetch faculties when component mounts
+  // Auto-fill lecturer info when component mounts
   useEffect(() => {
-    const fetchFaculties = async () => {
+    if (lecturerInfo) {
+      setFormData(prev => ({
+        ...prev,
+        facultyName: lecturerInfo.stream_name || "",
+        lecturerName: `${lecturerInfo.name} ${lecturerInfo.surname}`,
+        courseName: lecturerInfo.module_name || "",
+        courseCode: lecturerInfo.module_code || ""
+      }));
+    }
+  }, [lecturerInfo]);
+
+  // Fetch modules for the lecturer's stream
+  useEffect(() => {
+    const fetchModules = async () => {
+      if (!lecturerInfo?.stream_id) return;
+      
       try {
         const res = await fetch("http://localhost:5000/api/lecturer/faculties", {
           headers: {
@@ -33,65 +48,66 @@ export default function ReportForm({ user, onSubmitted }) {
           },
         });
         const data = await res.json();
-        if (data.success) {
-          setFaculties(data.faculties || []);
+        if (data.success && data.faculties.length > 0) {
+          setModules(data.faculties[0].modules || []);
         }
       } catch (err) {
-        console.error("Error fetching faculties:", err);
+        console.error("Error fetching modules:", err);
       }
     };
-    fetchFaculties();
-  }, [user.token]);
+    fetchModules();
+  }, [user.token, lecturerInfo]);
 
-  // Set modules when faculty changes
-  useEffect(() => {
-    if (!formData.facultyName) {
-      setModules([]);
-      return;
+  // Fetch total students count
+useEffect(() => {
+  const fetchStudentCount = async () => {
+    if (!lecturerInfo?.stream_id) return;
+    
+    try {
+      const res = await fetch("http://localhost:5000/api/lecturer/student-count", {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      const data = await res.json();
+      if (data.success) {
+        setFormData(prev => ({
+          ...prev,
+          totalStudents: data.total_students.toString()
+        }));
+      }
+    } catch (err) {
+      console.error("Error fetching student count:", err);
     }
-    const selectedFaculty = faculties.find(f => f.name === formData.facultyName);
-    if (selectedFaculty) {
-      setModules(selectedFaculty.modules || []);
-    }
-  }, [formData.facultyName, faculties]);
+  };
+  fetchStudentCount();
+}, [user.token, lecturerInfo]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => {
       const newData = { ...prev, [name]: value };
       
-      // If selecting a module, auto-fill module code
-      if (name === 'moduleName') {
+      // If selecting a module/course, auto-fill course code
+      if (name === 'courseName') {
         const selectedModule = modules.find(m => m.name === value);
         if (selectedModule) {
-          newData.moduleCode = selectedModule.code;
+          newData.courseCode = selectedModule.code;
         }
       }
       return newData;
     });
   };
 
-  // Get current week number
-  const getWeekNumber = (date) => {
-    const d = new Date(date);
-    d.setHours(0, 0, 0, 0);
-    d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
-    const week1 = new Date(d.getFullYear(), 0, 4);
-    return 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
-  };
-
-  const handleDateChange = (e) => {
-    const date = e.target.value;
-    setFormData(prev => ({
-      ...prev,
-      dateOfLecture: date,
-      weekOfReporting: date ? `Week ${getWeekNumber(date)}` : ''
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!user) return setMessage("You must be logged in to submit a report");
+    if (!user) {
+      setMessage("You must be logged in to submit a report");
+      return;
+    }
+
+    setLoading(true);
+    setMessage("");
 
     try {
       const res = await fetch("http://localhost:5000/api/reports", {
@@ -103,197 +119,249 @@ export default function ReportForm({ user, onSubmitted }) {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+      
       if (data.success) {
-        setMessage("Report submitted successfully");
-        setFormData({
-          facultyName: "",
+        setMessage("Report submitted successfully to Principal Lecturer");
+        // Reset only the fields that should be cleared
+        setFormData(prev => ({
+          ...prev,
           className: "",
           weekOfReporting: "",
           dateOfLecture: "",
-          moduleName: "",
-          moduleCode: "",
-          lecturerName: user.username,
           actualStudents: "",
-          totalStudents: "",
+          
           venue: "",
           scheduledTime: "",
           topic: "",
           learningOutcomes: "",
           recommendations: "",
-        });
-        if (onSubmitted) onSubmitted();
+        }));
+        if (onSubmitted) onSubmitted(data);
       } else {
         setMessage(data.message || "Failed to submit report");
       }
     } catch (err) {
       console.error("Report submit error:", err);
       setMessage("Server error. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="report-form-container">
-      <h2>Lecturer Reporting Form</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Faculty</label>
-          <select
-            name="facultyName"
-            value={formData.facultyName}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Faculty</option>
-            {faculties.map(faculty => (
-              <option key={faculty.id} value={faculty.name}>
-                {faculty.name}
-              </option>
-            ))}
-          </select>
+      <form onSubmit={handleSubmit} className="report-form">
+        <div className="form-row">
+          <div className="form-group">
+            <label>Faculty/Stream Name *</label>
+            <input
+              type="text"
+              name="facultyName"
+              value={formData.facultyName}
+              onChange={handleChange}
+              required
+              readOnly
+              className="readonly-field"
+              title="Auto-filled from your assigned stream"
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Class Name *</label>
+            <input
+              type="text"
+              name="className"
+              value={formData.className}
+              onChange={handleChange}
+              placeholder="e.g., Year 1 Group A"
+              required
+            />
+          </div>
         </div>
 
-        <div className="form-group">
-          <label>Module</label>
-          <select
-            name="moduleName"
-            value={formData.moduleName}
-            onChange={handleChange}
-            required
-            disabled={!formData.facultyName}
-          >
-            <option value="">Select Module</option>
-            {modules.map(module => (
-              <option key={`${module.id}-${module.code}`} value={module.name}>
-                {module.name}
-              </option>
-            ))}
-          </select>
+        <div className="form-row">
+          <div className="form-group">
+            <label>Week of Reporting *</label>
+            <input
+              type="text"
+              name="weekOfReporting"
+              value={formData.weekOfReporting}
+              onChange={handleChange}
+              placeholder="e.g., Week 1, Week 12"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Date of Lecture *</label>
+            <input
+              type="date"
+              name="dateOfLecture"
+              value={formData.dateOfLecture}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
 
-        <div className="form-group">
-          <label>Module Code</label>
-          <input
-            type="text"
-            name="moduleCode"
-            value={formData.moduleCode}
-            readOnly
-            required
-          />
+        <div className="form-row">
+          <div className="form-group">
+            <label>Course/Module Name *</label>
+            {modules.length > 0 ? (
+              <select
+                name="courseName"
+                value={formData.courseName}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Module</option>
+                {modules.map(module => (
+                  <option key={module.id} value={module.name}>
+                    {module.name}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                name="courseName"
+                value={formData.courseName}
+                onChange={handleChange}
+                required
+                readOnly={!!lecturerInfo?.module_name}
+                className={lecturerInfo?.module_name ? "readonly-field" : ""}
+              />
+            )}
+          </div>
+
+          <div className="form-group">
+            <label>Course Code *</label>
+            <input
+              type="text"
+              name="courseCode"
+              value={formData.courseCode}
+              onChange={handleChange}
+              required
+              readOnly
+              className="readonly-field"
+            />
+          </div>
         </div>
 
-        <div className="form-group">
-          <label>Date of Lecture</label>
-          <input
-            type="date"
-            name="dateOfLecture"
-            value={formData.dateOfLecture}
-            onChange={handleDateChange}
-            required
-          />
+        <div className="form-row">
+          <div className="form-group full-width">
+            <label>Lecturer Name *</label>
+            <input
+              type="text"
+              name="lecturerName"
+              value={formData.lecturerName}
+              readOnly
+              required
+              className="readonly-field"
+              title="Auto-filled from your profile"
+            />
+          </div>
         </div>
 
-        <div className="form-group">
-          <label>Week of Reporting</label>
-          <input
-            type="text"
-            name="weekOfReporting"
-            value={formData.weekOfReporting}
-            readOnly
-            required
-          />
+        <div className="form-row">
+          <div className="form-group">
+            <label>Actual Students Present *</label>
+            <input
+              type="number"
+              name="actualStudents"
+              value={formData.actualStudents}
+              onChange={handleChange}
+              min="0"
+              placeholder="Number of students who attended"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Total Registered Students *</label>
+            <input
+              type="number"
+              name="totalStudents"
+              value={formData.totalStudents}
+              onChange={handleChange}
+              min="0"
+              readOnly
+              className="readonly-field"
+              title="Auto-filled from student enrollment data"
+            />
+          </div>
         </div>
 
-        <div className="form-group">
-          <label>Lecturer Name</label>
-          <input
-            type="text"
-            name="lecturerName"
-            value={formData.lecturerName}
-            readOnly
-            required
-          />
+        <div className="form-row">
+          <div className="form-group">
+            <label>Venue of Class *</label>
+            <input
+              type="text"
+              name="venue"
+              value={formData.venue}
+              onChange={handleChange}
+              placeholder="e.g., Lab 301, Room B12"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Scheduled Lecture Time *</label>
+            <input
+              type="time"
+              name="scheduledTime"
+              value={formData.scheduledTime}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
 
-        <div className="form-group">
-          <label>Venue</label>
-          <input
-            type="text"
-            name="venue"
-            value={formData.venue}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Scheduled Time</label>
-          <input
-            type="time"
-            name="scheduledTime"
-            value={formData.scheduledTime}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Students Present</label>
-          <input
-            type="number"
-            name="actualStudents"
-            value={formData.actualStudents}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Total Students</label>
-          <input
-            type="number"
-            name="totalStudents"
-            value={formData.totalStudents}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Topic</label>
+        <div className="form-group full-width">
+          <label>Topic Taught *</label>
           <input
             type="text"
             name="topic"
             value={formData.topic}
             onChange={handleChange}
+            placeholder="Brief description of the topic covered"
             required
           />
         </div>
 
-        <div className="form-group">
-          <label>Learning Outcomes</label>
+        <div className="form-group full-width">
+          <label>Learning Outcomes of the Topic *</label>
           <textarea
             name="learningOutcomes"
             value={formData.learningOutcomes}
             onChange={handleChange}
+            placeholder="What students should be able to do after this lesson..."
+            rows="4"
             required
           />
         </div>
 
-        <div className="form-group">
-          <label>Recommendations</label>
+        <div className="form-group full-width">
+          <label>Lecturer's Recommendations</label>
           <textarea
             name="recommendations"
             value={formData.recommendations}
             onChange={handleChange}
-            required
+            placeholder="Any recommendations or observations (optional)"
+            rows="4"
           />
         </div>
 
-        <button type="submit">Submit Report</button>
+        <div className="form-actions">
+          <button type="submit" disabled={loading}>
+            {loading ? "Submitting..." : "Submit Report to Principal Lecturer"}
+          </button>
+        </div>
+
         {message && (
-          <p style={{ color: message.includes("successfully") ? "#4ade80" : "#f87171" }}>
+          <div className={`form-message ${message.includes("success") ? "success" : "error"}`}>
             {message}
-          </p>
+          </div>
         )}
       </form>
     </div>

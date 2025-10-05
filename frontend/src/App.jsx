@@ -11,8 +11,12 @@ import ProgramLeader from "./components/ProgramLeader";
 import AdminPage from "./components/AdminPage";
 import ClassesList from "./components/ClassesList";
 import ClassDetail from "./components/ClassDetail";
+import { FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
 
 export default function App() {
+  const linkedinUrl = "https://www.linkedin.com/in/divinechukwudi";
+  const githubUrl = "https://github.com/DivineChukwudi";
+  const gmailUrl = "mailto:chukwudidivine20@gmail.com";
   // ==================== USER STATE ====================
   const [user, setUser] = useState(() => {
     try {
@@ -124,6 +128,17 @@ export default function App() {
 
         <Route path="*" element={<Navigate to={user ? "/student" : "/"} replace />} />
       </Routes>
+       <footer className="login-footer">
+        <div className="footer-copy">
+          &copy; {new Date().getFullYear()} LUCT Reporting System. All rights reserved | System designed by etern.pptx
+        </div>
+        <div className="footer-links">
+          <a href={linkedinUrl} target="_blank" rel="noopener noreferrer"><FaLinkedin /> LinkedIn</a>
+          <a href={githubUrl} target="_blank" rel="noopener noreferrer"><FaGithub /> GitHub</a>
+          <a href={gmailUrl} target="_blank" rel="noopener noreferrer"><FaEnvelope /> Gmail</a>
+        </div>
+      </footer>
     </Router>
+    
   );
 }

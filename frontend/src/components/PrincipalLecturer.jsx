@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { exportReportsToExcel } from "../utils/excelExport";
 import "./PrincipalLecturer.css";
 
 export default function PrincipalLecturer({ user }) {
@@ -17,6 +18,7 @@ export default function PrincipalLecturer({ user }) {
     complaints: false,
     ratings: false
   });
+  const [searchTerm, setSearchTerm] = useState("");
 
   const authHeaders = () => ({
     "Content-Type": "application/json",
@@ -33,7 +35,6 @@ export default function PrincipalLecturer({ user }) {
         const reportsList = Array.isArray(data) ? data : data.reports || [];
         setReports(reportsList);
         
-        // Only show badge if tab hasn't been viewed yet
         if (!viewedTabs.reports) {
           const unread = reportsList.filter(r => !r.feedback || r.feedback.trim() === '').length;
           setUnreadReportsCount(unread);
@@ -60,7 +61,6 @@ export default function PrincipalLecturer({ user }) {
         const complaintsList = data.success && Array.isArray(data.complaints) ? data.complaints : [];
         setComplaints(complaintsList);
         
-        // Always show pending complaints count (action-based, not view-based)
         const pending = complaintsList.filter(c => c.status === 'pending').length;
         setPendingCount(pending);
       } catch (err) {
@@ -89,7 +89,6 @@ export default function PrincipalLecturer({ user }) {
             summary: data.summary || []
           });
           
-          // Only show badge if tab hasn't been viewed yet
           if (!viewedTabs.ratings) {
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -114,13 +113,35 @@ export default function PrincipalLecturer({ user }) {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     
-    // Mark tab as viewed and clear its notification
     if (tab === 'reports') {
       setViewedTabs(prev => ({ ...prev, reports: true }));
       setUnreadReportsCount(0);
     } else if (tab === 'ratings') {
       setViewedTabs(prev => ({ ...prev, ratings: true }));
       setNewRatingsCount(0);
+    }
+  };
+
+  const handleDeleteReport = async (reportId) => {
+    if (!window.confirm('Are you sure you want to delete this report?')) return;
+    
+    try {
+      const res = await fetch(`http://localhost:5000/api/reports/${reportId}`, {
+        method: 'DELETE',
+        headers: authHeaders()
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        setMsg('Report deleted successfully');
+        setReports(reports.filter(r => r.id !== reportId));
+        setTimeout(() => setMsg(''), 3000);
+      } else {
+        setMsg(data.message || 'Failed to delete report');
+      }
+    } catch (err) {
+      console.error('Error deleting report:', err);
+      setMsg('Error deleting report');
     }
   };
 
@@ -173,6 +194,27 @@ export default function PrincipalLecturer({ user }) {
     }
   };
 
+  const handleExportReports = () => {
+    if (filteredReports.length === 0) {
+      alert("No reports to export");
+      return;
+    }
+    exportReportsToExcel(filteredReports);
+  };
+
+  const filteredReports = reports.filter(r => {
+    if (!searchTerm) return true;
+    const search = searchTerm.toLowerCase();
+    return (
+      r.lecturer_name?.toLowerCase().includes(search) ||
+      r.lecturername?.toLowerCase().includes(search) ||
+      r.course_name?.toLowerCase().includes(search) ||
+      r.coursename?.toLowerCase().includes(search) ||
+      r.topic?.toLowerCase().includes(search) ||
+      r.feedback?.toLowerCase().includes(search)
+    );
+  });
+
   const NotificationBadge = ({ count }) => {
     if (count === 0) return null;
     return (
@@ -201,9 +243,15 @@ export default function PrincipalLecturer({ user }) {
   return (
     <div className="page-container">
       <h1>Principal Lecturer Portal</h1>
-      <p className="welcome-text">
-        Welcome, {user.lecturer_info?.name} {user.lecturer_info?.surname}
-      </p>
+      <div className="welcome-section">
+        <div className="welcome-icon">👋🏾</div>
+        <div>
+          <p className="welcome-text">
+            Welcome, <span>{user.lecturer_info?.name} {user.lecturer_info?.surname}</span>
+            <span className="role">Principal Lecturer</span>
+          </p>
+        </div>
+      </div>
       {msg && <p className="info-message">{msg}</p>}
 
       <div className="tabs">
@@ -235,9 +283,44 @@ export default function PrincipalLecturer({ user }) {
 
       {activeTab === "reports" && (
         <div className="reports-section">
-          <h2>Lecturer Reports from Your Stream</h2>
-          {reports.length === 0 ? (
-            <p>No reports submitted yet.</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <h2>Lecturer Reports from Your Stream</h2>
+            <button 
+              onClick={handleExportReports}
+              style={{ 
+                background: '#4CAF50', 
+                color: 'white', 
+                padding: '10px 20px', 
+                border: 'none', 
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: '600'
+              }}
+            >
+              📥 Export to Excel
+            </button>
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <input
+              type="text"
+              placeholder="Search by lecturer, course, topic, or feedback..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '8px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                color: '#ffffff',
+                fontSize: '1rem'
+              }}
+            />
+          </div>
+
+          {filteredReports.length === 0 ? (
+            <p>No reports found.</p>
           ) : (
             <table className="reports-table">
               <thead>
@@ -249,11 +332,11 @@ export default function PrincipalLecturer({ user }) {
                   <th>Topic</th>
                   <th>Students</th>
                   <th>Feedback</th>
-                  <th>Action</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {reports.map((r) => (
+                {filteredReports.map((r) => (
                   <tr key={r.id}>
                     <td>{r.id}</td>
                     <td>{r.lecturer_name ?? r.lecturername}</td>
@@ -270,7 +353,15 @@ export default function PrincipalLecturer({ user }) {
                       />
                     </td>
                     <td>
-                      <button onClick={() => submitFeedback(r.id)}>Save</button>
+                      <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
+                        <button onClick={() => submitFeedback(r.id)}>Save</button>
+                        <button 
+                          onClick={() => handleDeleteReport(r.id)}
+                          style={{ background: '#dc3545' }}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

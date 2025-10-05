@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import ReportForm from "./ReportForm";
+import PRLRatingForm from "./PRLRatingForm";
 import "./LecturerPage.css";
 
 export default function LecturerPage({ user }) {
@@ -10,7 +11,6 @@ export default function LecturerPage({ user }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedProgram, setSelectedProgram] = useState(null);
-  const [ratings, setRatings] = useState([]);
   const [lecturerInfo, setLecturerInfo] = useState(null);
   
   // Attendance state
@@ -125,29 +125,8 @@ export default function LecturerPage({ user }) {
   useEffect(() => {
     if (activeTab === 'attendance') {
       fetchAttendanceData();
-    } else if (activeTab === 'ratings') {
-      const fetchRatings = async () => {
-        try {
-          const res = await fetch('http://localhost:5000/api/lecturer/ratings', {
-            headers: authHeaders()
-          });
-          const data = await res.json();
-          if (data.success) {
-            setRatings(data.ratings);
-            setError(null);
-          } else {
-            setError(data.message || 'Failed to load ratings');
-            setRatings([]);
-          }
-        } catch (err) {
-          console.error('Error fetching ratings:', err);
-          setError('Failed to load ratings');
-          setRatings([]);
-        }
-      };
-      fetchRatings();
     }
-  }, [activeTab, fetchAttendanceData, authHeaders]);
+  }, [activeTab, fetchAttendanceData]);
 
   const renderClasses = () => {
     if (loading) return <div className="loading">Loading class information...</div>;
@@ -230,6 +209,29 @@ export default function LecturerPage({ user }) {
     }
   };
 
+  const handleDeleteReport = async (reportId) => {
+    if (!window.confirm('Are you sure you want to delete this report?')) return;
+    
+    try {
+      const res = await fetch(`http://localhost:5000/api/reports/${reportId}`, {
+        method: 'DELETE',
+        headers: authHeaders()
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        setMsg('Report deleted successfully');
+        setReports(reports.filter(r => r.id !== reportId));
+        setTimeout(() => setMsg(''), 3000);
+      } else {
+        setError(data.message || 'Failed to delete report');
+      }
+    } catch (err) {
+      console.error('Error deleting report:', err);
+      setError('Error deleting report');
+    }
+  };
+
   const renderReports = () => (
     <div className="reports-section">
       <h2>Submit Report to Principal Lecturer</h2>
@@ -273,24 +275,30 @@ export default function LecturerPage({ user }) {
               <th>Topic</th>
               <th>Students Present</th>
               <th>Total</th>
-              <th>Status</th>
               <th>Submitted</th>
               <th>Feedback</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {reports.map((r) => (
               <tr key={r.id}>
-                <td>{r.date_of_lecture ?? r.dateOfLecture}</td>
-                <td>{r.course_name ?? r.courseName}</td>
+                <td>{r.dateoflecture}</td>
+                <td>{r.coursename}</td>
                 <td>{r.topic}</td>
-                <td>{r.actual_students ?? r.actualStudents}</td>
-                <td>{r.total_students ?? r.totalStudents}</td>
-                <td className={`status ${r.status || 'pending'}`}>
-                  {r.status ? r.status.charAt(0).toUpperCase() + r.status.slice(1) : 'Pending'}
-                </td>
+                <td>{r.actualstudents}</td>
+                <td>{r.totalstudents}</td>
                 <td>{new Date(r.submitted_at).toLocaleString()}</td>
                 <td>{r.feedback || '-'}</td>
+                <td>
+                  <button 
+                    onClick={() => handleDeleteReport(r.id)}
+                    className="delete-btn"
+                    style={{ background: '#dc3545', color: 'white', padding: '6px 12px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -359,10 +367,10 @@ export default function LecturerPage({ user }) {
           Attendance
         </button>
         <button 
-          className={`tab ${activeTab === 'ratings' ? 'active' : ''}`}
-          onClick={() => setActiveTab('ratings')}
+          className={`tab ${activeTab === 'rateprl' ? 'active' : ''}`}
+          onClick={() => setActiveTab('rateprl')}
         >
-          Ratings
+          Rate PRL
         </button>
       </div>
 
@@ -371,6 +379,9 @@ export default function LecturerPage({ user }) {
       <div className="tab-content">
         {activeTab === 'classes' && renderClasses()}
         {activeTab === 'reports' && renderReports()}
+        {activeTab === 'rateprl' && (
+          <PRLRatingForm authHeaders={authHeaders} />
+        )}
         {activeTab === 'attendance' && (
           <div className="attendance-container">
             <h2>Attendance Monitoring</h2>
@@ -481,60 +492,6 @@ export default function LecturerPage({ user }) {
             ) : (
               <div className="no-data">
                 {loadingAttendance ? 'Loading attendance data...' : 'No attendance records found'}
-              </div>
-            )}
-          </div>
-        )}
-        {activeTab === 'ratings' && (
-          <div className="ratings-container">
-            <h2>Student Ratings & Feedback</h2>
-            {error && <p className="error-message">{error}</p>}
-            {ratings.length === 0 ? (
-              <p>No ratings received yet.</p>
-            ) : (
-              <div className="ratings-grid">
-                {ratings.map(r => (
-                  <div key={r.course} className="rating-card">
-                    <div className="rating-header">
-                      <h3>{r.course}</h3>
-                      <span className="faculty">{r.faculty_name}</span>
-                    </div>
-                    <div className="rating-stats">
-                      <div className="stat">
-                        <label>Average Rating:</label>
-                        <span className={`rating ${
-                          r.average_rating >= 4 ? 'excellent' :
-                          r.average_rating >= 3 ? 'good' :
-                          r.average_rating >= 2 ? 'fair' : 'poor'
-                        }`}>
-                          {parseFloat(r.average_rating).toFixed(1)} / 5
-                        </span>
-                      </div>
-                      <div className="stat">
-                        <label>Total Ratings:</label>
-                        <span>{r.total_ratings}</span>
-                      </div>
-                    </div>
-                    <div className="recent-ratings">
-                      <h4>Recent Feedback</h4>
-                      <div className="ratings-list">
-                        {r.recent_ratings.slice(0, 3).map((rating, i) => (
-                          <div key={i} className="rating-item">
-                            <div className="rating-score">
-                              {rating.rating} / 5
-                            </div>
-                            <p className="rating-comment">
-                              {rating.comments}
-                            </p>
-                            <span className="rating-date">
-                              {new Date(rating.submitted_at).toLocaleDateString()}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
               </div>
             )}
           </div>

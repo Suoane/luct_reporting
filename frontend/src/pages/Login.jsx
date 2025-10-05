@@ -5,9 +5,7 @@ import "./Login.css";
 import regSuccessGif from "../assets/reg-succ.gif";
 
 export default function Login({ setUser }) {
-  const linkedinUrl = "https://www.linkedin.com/in/divinechukwudi";
-  const githubUrl = "https://github.com/DivineChukwudi";
-  const gmailUrl = "mailto:chukwudidivine20@gmail.com";
+ 
 
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -323,16 +321,7 @@ export default function Login({ setUser }) {
         )}
       </div>
 
-      <footer className="login-footer">
-        <div className="footer-copy">
-          &copy; {new Date().getFullYear()} LUCT Reporting System. All rights reserved | System designed by etern.pptx
-        </div>
-        <div className="footer-links">
-          <a href={linkedinUrl} target="_blank" rel="noopener noreferrer"><FaLinkedin /> LinkedIn</a>
-          <a href={githubUrl} target="_blank" rel="noopener noreferrer"><FaGithub /> GitHub</a>
-          <a href={gmailUrl} target="_blank" rel="noopener noreferrer"><FaEnvelope /> Gmail</a>
-        </div>
-      </footer>
+     
     </div>
   );
 }

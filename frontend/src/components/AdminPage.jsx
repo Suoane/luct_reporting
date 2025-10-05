@@ -171,6 +171,32 @@ export default function AdminPage({ user }) {
     }
   };
 
+  const handleDeleteReport = async (reportId) => {
+    if (!window.confirm('Are you sure you want to delete this report?')) return;
+    
+    try {
+      const res = await fetch(`http://localhost:5000/api/reports/${reportId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${user.token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      const data = await res.json();
+      
+      if (data.success) {
+        setReports(reports.filter(r => r.id !== reportId));
+        alert('Report deleted successfully');
+      } else {
+        alert(data.message || 'Failed to delete report');
+      }
+    } catch (err) {
+      console.error('Error deleting report:', err);
+      alert('Error deleting report');
+    }
+  };
+
   const handleEditUser = (user) => {
     setEditingUser(user);
     setUserForm({
@@ -487,19 +513,27 @@ export default function AdminPage({ user }) {
                 <th>Lecturer</th>
                 <th>Date</th>
                 <th>Topic</th>
-                <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {reports.map(r => (
                 <tr key={r.id}>
                   <td>{r.id}</td>
-                  <td>{r.faculty_name ?? r.facultyName}</td>
-                  <td>{r.course_name ?? r.courseName}</td>
-                  <td>{r.lecturer_name ?? r.lecturerName}</td>
-                  <td>{new Date(r.date_of_lecture ?? r.dateOfLecture).toLocaleDateString()}</td>
+                  <td>{r.facultyname}</td>
+                  <td>{r.coursename}</td>
+                  <td>{r.lecturername}</td>
+                  <td>{new Date(r.dateoflecture).toLocaleDateString()}</td>
                   <td>{r.topic}</td>
-                  <td><span className={`status-badge ${r.status || 'pending'}`}>{r.status || 'pending'}</span></td>
+                  <td>
+                    <button 
+                      onClick={() => handleDeleteReport(r.id)}
+                      className="delete-btn"
+                      style={{ background: '#dc3545', color: 'white', padding: '6px 12px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                      <FontAwesomeIcon icon={faTrash} /> Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>

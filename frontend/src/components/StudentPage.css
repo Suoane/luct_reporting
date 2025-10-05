@@ -1,193 +1,95 @@
 .page-container {
-  background: linear-gradient(135deg, #1a1a1a, #2b1a2b);
-  color: #ffffff;
-  padding: 20px;
-  font-family: "Cinzel", serif;
   min-height: 100vh;
+  background: linear-gradient(120deg, #23243a 0%, #2c2d4e 100%);
+  color: #ffffff;
+  padding: 2rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
   position: relative;
 }
 
-h1, h2 {
+.page-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: #ED1C24;
+}
+
+h1, h2, h3 {
   color: #ffffff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  font-weight: 600;
   margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-transform: uppercase;
   letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+h2 {
+  color: #ED1C24;
+  font-size: 1.5rem;
+  margin: 2rem 0 1.5rem 0;
 }
 
-th, td {
-  border: 1px solid #444;
-  padding: 8px;
-  text-align: left;
+h3 {
+  font-size: 1.3rem;
+  margin: 1.5rem 0 1rem 0;
 }
 
-th {
-  background-color: #3e1a3e;
-  color: #f2b632;
-}
-
-tr:hover {
-  background-color: rgba(242, 182, 50, 0.2);
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 8px;
-  margin: 5px 0;
-  background: rgba(40, 40, 40, 0.95);
-  border: 1px solid #666;
-  color: #ffffff;
-  border-radius: 4px;
-}
-
-select {
-  background-color: #282828;
-  color: #ffffff;
-}
-
-select option {
-  background-color: #282828;
-  color: #ffffff;
-  padding: 8px;
-}
-
-select option[value=""] {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-button {
-  background-color: #f2b632;
-  color: #1a1a1a;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-button:hover {
-  background-color: #e6a600;
-}
-
-.info {
-  margin-top: 10px;
-  color: #4ade80;
-}
-.page-container {
-  max-width: 100%;
-  margin: auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  overflow-x: hidden;
-}
-
+/* Navigation Tabs */
 .student-nav {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 1rem;
+  margin: 1.5rem 0 2.5rem 0;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  flex-wrap: wrap;
 }
 
 .student-nav button {
-  padding: 10px 15px;
-  border: 1px solid #f2b632;
+  padding: 1rem 2rem;
+  border: none;
   background: transparent;
-  color: #f2b632;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
+  border-radius: 8px;
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.student-nav button:hover {
+  background: rgba(237, 28, 36, 0.1);
+  transform: translateY(-2px);
+  color: #ED1C24;
 }
 
 .student-nav button.active {
-  background: #f2b632;
-  color: #1a1a1a;
+  background: #ED1C24;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(237, 28, 36, 0.3);
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-@media screen and (max-width: 768px) {
-  table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-}
-
-table th, table td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: left;
-}
-
-.attendance-form {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
+/* Forms */
+.attendance-form,
 .rating-form {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin-bottom: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+  margin: 2rem auto;
   width: 100%;
-  max-width: 1200px;
-}
-
-.attendance-form select, .attendance-form input {
-  padding: 8px 12px;
-  width: 100%;
-  min-width: 200px;
-  border-radius: 4px;
-  border: 1px solid #666;
-  background: #282828;
-  color: #ffffff;
-  flex: 1;
-}
-
-.attendance-form select option {
-  color: #ffffff;
-  background: #282828;
-}
-
-.attendance-form select option[value=""] {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.attendance-form button {
-  margin: 0;
-  height: 40px;
-  padding: 0 20px;
-  white-space: nowrap;
-}
-
-.rating-form select, .rating-form input, .rating-form textarea {
-  padding: 8px;
-  width: 100%;
-  border-radius: 4px;
-  border: 1px solid #666;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.07);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
 }
 
 .rating-form textarea {
@@ -196,13 +98,214 @@ table th, table td {
   resize: vertical;
 }
 
-button {
-  padding: 6px 12px;
+input, select, textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+select {
+  background-color: rgba(40, 40, 60, 0.5);
   cursor: pointer;
 }
 
-.info {
-  color: green;
-  font-weight: bold;
-  margin-bottom: 10px;
+select option {
+  background-color: #282838;
+  color: #ffffff;
+  padding: 8px;
+}
+
+select option[value=""] {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #ED1C24;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(237, 28, 36, 0.2);
+  outline: none;
+}
+
+input:hover, select:hover, textarea:hover {
+  border-color: rgba(237, 28, 36, 0.5);
+}
+
+/* Buttons */
+button {
+  background-color: #ED1C24;
+  color: #ffffff;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(237, 28, 36, 0.3);
+  font-size: 0.95rem;
+}
+
+button:hover {
+  background-color: #d01920;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(237, 28, 36, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button[type="submit"] {
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 2rem auto;
+  max-width: 1200px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+}
+
+th, td {
+  padding: 1rem 1.2rem;
+  text-align: left;
+  border: none;
+}
+
+th {
+  background: rgba(40, 40, 60, 0.35);
+  color: #ED1C24;
+  padding: 1rem 1.2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.3s;
+}
+
+tbody tr:hover {
+  background: rgba(237, 28, 36, 0.08);
+}
+
+td.present {
+  color: #4ade80;
+  font-weight: 600;
+}
+
+td.absent {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* Messages */
+.info,
+.success-message {
+  background: rgba(74, 222, 128, 0.1);
+  color: #4ade80;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  backdrop-filter: blur(8px);
+  font-weight: 500;
+}
+
+.error-message {
+  background: rgba(237, 28, 36, 0.1);
+  color: #ED1C24;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  border: 1px solid rgba(237, 28, 36, 0.2);
+  backdrop-filter: blur(8px);
+  font-weight: 500;
+}
+
+/* Section Cards */
+.attendance-section,
+.complaints-section,
+.rating-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 1.5rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .page-container {
+    padding: 1rem;
+  }
+
+  .student-nav {
+    flex-direction: column;
+  }
+  
+  .student-nav button {
+    width: 100%;
+    text-align: center;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    padding: 0.8rem;
+  }
+
+  .attendance-form,
+  .rating-form {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+}
+
+/* No data state */
+tr td[colspan] {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+  padding: 2rem;
+}
+
+/* Loading state */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
 }

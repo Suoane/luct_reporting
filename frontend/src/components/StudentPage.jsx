@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ComplaintForm from "./ComplaintForm";
 import ComplaintResponses from "./ComplaintResponses";
+import { exportComplaintsToExcel } from "../utils/excelExport";
 import "./StudentPage.css";
 
 export default function StudentPage({ user }) {
@@ -19,6 +20,8 @@ export default function StudentPage({ user }) {
   const [selectedLecturer, setSelectedLecturer] = useState("");
   const [date, setDate] = useState("");
   const [attendanceMsg, setAttendanceMsg] = useState("");
+  const [complaints, setComplaints] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const ratingCommentsMap = {
     5: "Extremely satisfactory",
@@ -83,6 +86,20 @@ export default function StudentPage({ user }) {
         }
       };
       fetchAttendance();
+
+      const fetchComplaints = async () => {
+        try {
+          const res = await fetch("http://localhost:5000/api/complaints/student", {
+            headers: authHeaders()
+          });
+          const data = await res.json();
+          setComplaints(data.success && Array.isArray(data.complaints) ? data.complaints : []);
+        } catch (err) {
+          console.error("Error fetching complaints:", err);
+          setComplaints([]);
+        }
+      };
+      fetchComplaints();
     }
   }, [tab]);
 
@@ -153,6 +170,25 @@ export default function StudentPage({ user }) {
       setAttendanceMsg("Error submitting attendance");
     }
   };
+
+  const handleExportComplaints = () => {
+    if (complaints.length === 0) {
+      alert("No complaint responses to export");
+      return;
+    }
+    exportComplaintsToExcel(complaints);
+  };
+
+  const filteredComplaints = complaints.filter(c => {
+    if (!searchTerm) return true;
+    const search = searchTerm.toLowerCase();
+    return (
+      c.subject?.toLowerCase().includes(search) ||
+      c.message?.toLowerCase().includes(search) ||
+      c.reply?.toLowerCase().includes(search) ||
+      c.status?.toLowerCase().includes(search)
+    );
+  });
 
   return (
     <div className="page-container">
@@ -243,8 +279,74 @@ export default function StudentPage({ user }) {
           <h2>Send Complaint/Report to Principal Lecturer</h2>
           <ComplaintForm user={user} authHeaders={authHeaders} />
 
-          <h2>Your Complaint/Report Responses</h2>
-          <ComplaintResponses user={user} authHeaders={authHeaders} />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '2rem' }}>
+            <h2>Your Complaint/Report Responses</h2>
+            <button 
+              onClick={handleExportComplaints}
+              style={{ 
+                background: '#4CAF50', 
+                color: 'white', 
+                padding: '10px 20px', 
+                border: 'none', 
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: '600'
+              }}
+            >
+              📥 Export to Excel
+            </button>
+          </div>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <input
+              type="text"
+              placeholder="Search complaints by subject, message, reply, or status..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '12px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                borderRadius: '8px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                color: '#ffffff',
+                fontSize: '1rem'
+              }}
+            />
+          </div>
+
+          {filteredComplaints.length === 0 ? (
+            <p>No complaint responses found.</p>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Subject</th>
+                  <th>Message</th>
+                  <th>Status</th>
+                  <th>Reply</th>
+                  <th>Replied At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredComplaints.map(c => (
+                  <tr key={c.id}>
+                    <td>{new Date(c.created_at).toLocaleDateString()}</td>
+                    <td>{c.subject || '-'}</td>
+                    <td>{c.message}</td>
+                    <td>
+                      <span className={`status-badge ${c.status}`}>
+                        {c.status.charAt(0).toUpperCase() + c.status.slice(1)}
+                      </span>
+                    </td>
+                    <td>{c.reply || 'Pending response'}</td>
+                    <td>{c.replied_at ? new Date(c.replied_at).toLocaleDateString() : '-'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </>
       )}
 

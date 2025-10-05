@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import "./LecturerRatingForm.css";
 
 export default function LecturerRatingForm({ authHeaders }) {
@@ -22,7 +22,7 @@ export default function LecturerRatingForm({ authHeaders }) {
   useEffect(() => {
     const fetchLecturers = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/lecturers/student/stream/regular", {
+        const res = await fetch(API_BASE_URL + "/api/lecturers/student/stream/regular", {
           headers: authHeaders()
         });
         const data = await res.json();
@@ -38,7 +38,7 @@ export default function LecturerRatingForm({ authHeaders }) {
   useEffect(() => {
     const fetchModules = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/student/modules/stream", {
+        const res = await fetch(API_BASE_URL + "/api/student/modules/stream", {
           headers: authHeaders()
         });
         const data = await res.json();
@@ -78,7 +78,7 @@ export default function LecturerRatingForm({ authHeaders }) {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/ratings", {
+      const res = await fetch(API_BASE_URL + "/api/ratings", {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify({

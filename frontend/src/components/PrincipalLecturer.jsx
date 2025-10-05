@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { exportReportsToExcel } from "../utils/excelExport";
+import API_BASE_URL from '../config/api';
 import "./PrincipalLecturer.css";
 
 export default function PrincipalLecturer({ user }) {
@@ -28,7 +29,7 @@ export default function PrincipalLecturer({ user }) {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/reports", { 
+        const res = await fetch(`${API_BASE_URL}/api/reports`, { 
           headers: authHeaders() 
         });
         const data = await res.json();
@@ -54,7 +55,7 @@ export default function PrincipalLecturer({ user }) {
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/complaints/prl", {
+        const res = await fetch(`${API_BASE_URL}/api/complaints/prl`, {
           headers: authHeaders()
         });
         const data = await res.json();
@@ -78,7 +79,7 @@ export default function PrincipalLecturer({ user }) {
   useEffect(() => {
     const fetchRatings = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/ratings/prl", {
+        const res = await fetch(`${API_BASE_URL}/api/ratings/prl`, {
           headers: authHeaders()
         });
         const data = await res.json();
@@ -126,7 +127,7 @@ export default function PrincipalLecturer({ user }) {
     if (!window.confirm('Are you sure you want to delete this report?')) return;
     
     try {
-      const res = await fetch(`http://localhost:5000/api/reports/${reportId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/reports/${reportId}`, {
         method: 'DELETE',
         headers: authHeaders()
       });
@@ -147,7 +148,7 @@ export default function PrincipalLecturer({ user }) {
 
   const submitFeedback = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/reports/${id}/feedback`, {
+      const res = await fetch(`${API_BASE_URL}/api/reports/${id}/feedback`, {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify({ feedback: feedbacks[id] || "" }),
@@ -170,7 +171,7 @@ export default function PrincipalLecturer({ user }) {
 
   const submitReply = async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/complaints/${id}/reply`, {
+      const res = await fetch(`${API_BASE_URL}/api/complaints/${id}/reply`, {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify({ reply: replies[id] || "" }),

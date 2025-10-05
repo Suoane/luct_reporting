@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { useLocation } from "react-router-dom";
+import API_BASE_URL from '../config/api';
 import "./ReportTable.css";
 
 export default function ReportTable() {
@@ -13,7 +14,7 @@ export default function ReportTable() {
 
   useEffect(() => {
     if (!user) return;
-    fetch("http://localhost:5000/api/reports")
+    fetch(`${API_BASE_URL}/api/reports`)
       .then(res => res.json())
       .then(data => {
         if (user.role === "admin") setReports(data);

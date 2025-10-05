@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
+import API_BASE_URL from '../config/api';
 
 export default function ComplaintForm({ user, authHeaders }) {
   const [prls, setPrls] = useState([]);
@@ -9,10 +10,9 @@ export default function ComplaintForm({ user, authHeaders }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch PRLs (Principal Lecturers) from student's stream
     const fetchPRLs = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/prls/student/stream", { 
+        const res = await fetch(`${API_BASE_URL}/api/prls/student/stream`, { 
           headers: authHeaders() 
         });
         const data = await res.json();
@@ -34,7 +34,7 @@ export default function ComplaintForm({ user, authHeaders }) {
       return;
     }
     try {
-      const res = await fetch("http://localhost:5000/api/complaints", {
+      const res = await fetch(`${API_BASE_URL}/api/complaints`, {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify({ prl_id: prlId, subject, message })

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import ComplaintForm from "./ComplaintForm";
 import ComplaintResponses from "./ComplaintResponses";
 import { exportComplaintsToExcel } from "../utils/excelExport";
@@ -42,7 +42,7 @@ export default function StudentPage({ user }) {
   useEffect(() => {
     const fetchModules = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/student/modules/stream", {
+        const res = await fetch(API_BASE_URL + "/api/student/modules/stream", {
           headers: authHeaders()
         });
         const data = await res.json();
@@ -58,7 +58,7 @@ export default function StudentPage({ user }) {
   useEffect(() => {
     const fetchLecturers = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/lecturers/student/stream/regular", {
+        const res = await fetch(API_BASE_URL + "/api/lecturers/student/stream/regular", {
           headers: authHeaders()
         });
         const data = await res.json();
@@ -75,7 +75,7 @@ export default function StudentPage({ user }) {
     if (tab === "monitoring") {
       const fetchAttendance = async () => {
         try {
-          const res = await fetch("http://localhost:5000/api/student/attendance", {
+          const res = await fetch(API_BASE_URL + "/api/student/attendance", {
             headers: authHeaders()
           });
           const data = await res.json();
@@ -89,7 +89,7 @@ export default function StudentPage({ user }) {
 
       const fetchComplaints = async () => {
         try {
-          const res = await fetch("http://localhost:5000/api/complaints/student", {
+          const res = await fetch(API_BASE_URL + "/api/complaints/student", {
             headers: authHeaders()
           });
           const data = await res.json();
@@ -106,7 +106,7 @@ export default function StudentPage({ user }) {
   const submitRating = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/ratings", {
+      const res = await fetch(API_BASE_URL + "/api/ratings", {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify({
@@ -137,7 +137,7 @@ export default function StudentPage({ user }) {
       const moduleObj = modules.find(m => m.id === Number(selectedModule));
       if (!moduleObj) return setAttendanceMsg("Invalid module selected");
 
-      const res = await fetch("http://localhost:5000/api/student/attendance", {
+      const res = await fetch(API_BASE_URL + "/api/student/attendance", {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify({
@@ -293,7 +293,7 @@ export default function StudentPage({ user }) {
                 fontWeight: '600'
               }}
             >
-              📥 Export to Excel
+              ðŸ“¥ Export to Excel
             </button>
           </div>
 

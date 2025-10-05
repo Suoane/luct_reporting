@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus, faEdit, faTrash, faSearch, faChalkboardTeacher, faUserGraduate, faBook, faChartBar } from "@fortawesome/free-solid-svg-icons";
+import API_BASE_URL from '../config/api';
 import "./AdminPage.css";
 
 export default function AdminPage({ user }) {
@@ -34,7 +35,7 @@ export default function AdminPage({ user }) {
   useEffect(() => {
     const fetchStreamsAndModules = async () => {
       try {
-        const streamsRes = await fetch('http://localhost:5000/api/streams', {
+        const streamsRes = await fetch(`${API_BASE_URL}/api/streams`, {
           headers: {
             'Authorization': `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -43,7 +44,7 @@ export default function AdminPage({ user }) {
         const streamsData = await streamsRes.json();
         setStreams(streamsData.streams || []);
 
-        const modulesRes = await fetch('http://localhost:5000/api/modules', {
+        const modulesRes = await fetch(`${API_BASE_URL}/api/modules`, {
           headers: {
             'Authorization': `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -59,7 +60,7 @@ export default function AdminPage({ user }) {
 
     const fetchReports = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/reports", {
+        const res = await fetch(`${API_BASE_URL}/api/reports`, {
           headers: {
             'Authorization': `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -75,7 +76,7 @@ export default function AdminPage({ user }) {
 
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/users", {
+        const res = await fetch(`${API_BASE_URL}/api/users`, {
           headers: {
             'Authorization': `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -107,8 +108,8 @@ export default function AdminPage({ user }) {
     try {
       const method = editingUser ? 'PUT' : 'POST';
       const url = editingUser 
-        ? `http://localhost:5000/api/users/${editingUser.id}`
-        : 'http://localhost:5000/api/users';
+        ? `${API_BASE_URL}/api/users/${editingUser.id}`
+        : `${API_BASE_URL}/api/users`;
 
       const res = await fetch(url, {
         method,
@@ -122,7 +123,7 @@ export default function AdminPage({ user }) {
       const data = await res.json();
       
       if (res.ok) {
-        const usersRes = await fetch("http://localhost:5000/api/users", {
+        const usersRes = await fetch(`${API_BASE_URL}/api/users`, {
           headers: {
             'Authorization': `Bearer ${user.token}`,
             'Content-Type': 'application/json'
@@ -155,7 +156,7 @@ export default function AdminPage({ user }) {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user.token}`,
@@ -175,7 +176,7 @@ export default function AdminPage({ user }) {
     if (!window.confirm('Are you sure you want to delete this report?')) return;
     
     try {
-      const res = await fetch(`http://localhost:5000/api/reports/${reportId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/reports/${reportId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${user.token}`,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { exportReportsToExcel, exportPRLRatingsToExcel } from "../utils/excelExport";
 import "./ProgramLeader.css";
 
@@ -49,7 +49,7 @@ export default function ProgramLeader({ user }) {
 
   const fetchStreams = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/streams-public");
+      const res = await fetch(API_BASE_URL + "/api/streams-public");
       const data = await res.json();
       setStreams(data.streams || []);
     } catch (err) {
@@ -59,7 +59,7 @@ export default function ProgramLeader({ user }) {
 
   const fetchModules = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/modules-public");
+      const res = await fetch(API_BASE_URL + "/api/modules-public");
       const data = await res.json();
       setModules(data.modules || []);
     } catch (err) {
@@ -69,7 +69,7 @@ export default function ProgramLeader({ user }) {
 
   const fetchLecturers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/pl/lecturers", {
+      const res = await fetch(API_BASE_URL + "/api/pl/lecturers", {
         headers: authHeaders()
       });
       const data = await res.json();
@@ -81,7 +81,7 @@ export default function ProgramLeader({ user }) {
 
   const fetchReports = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/reports", {
+      const res = await fetch(API_BASE_URL + "/api/reports", {
         headers: authHeaders()
       });
       const data = await res.json();
@@ -94,7 +94,7 @@ export default function ProgramLeader({ user }) {
 
   const fetchPRLRatings = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/ratings/pl/prls", {
+      const res = await fetch(API_BASE_URL + "/api/ratings/pl/prls", {
         headers: authHeaders()
       });
       const data = await res.json();
@@ -109,7 +109,7 @@ export default function ProgramLeader({ user }) {
 
   const fetchLecturerRatings = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/pl/lecturer-ratings", {
+      const res = await fetch(API_BASE_URL + "/api/pl/lecturer-ratings", {
         headers: authHeaders()
       });
       const data = await res.json();
@@ -174,7 +174,7 @@ export default function ProgramLeader({ user }) {
     <div className="page-container">
       <h1>Program Leader Portal</h1>
       <div className="welcome-section">
-        <div className="welcome-icon">👋🏾</div>
+        <div className="welcome-icon">ðŸ‘‹ðŸ¾</div>
         <div>
           <p className="welcome-text">
             Welcome, <span>{user.username}</span>
@@ -284,7 +284,7 @@ export default function ProgramLeader({ user }) {
                 fontWeight: '600'
               }}
             >
-              📥 Export to Excel
+              ðŸ“¥ Export to Excel
             </button>
           </div>
 
@@ -419,7 +419,7 @@ export default function ProgramLeader({ user }) {
                 fontWeight: '600'
               }}
             >
-              📥 Export to Excel
+              ðŸ“¥ Export to Excel
             </button>
           </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash, FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
 import "./Login.css";
@@ -44,7 +44,7 @@ export default function Login({ setUser }) {
       const fetchStreams = async () => {
         try {
           setLoading(true);
-          const streamsRes = await fetch("http://localhost:5000/api/streams-public");
+          const streamsRes = await fetch(API_BASE_URL + "/api/streams-public");
           const streamsData = await streamsRes.json();
           
           console.log("Streams response:", streamsData); // Debug log
@@ -72,7 +72,7 @@ export default function Login({ setUser }) {
     e.preventDefault();
     setError("");
     try {
-      const res = await fetch("http://localhost:5000/api/login", {
+      const res = await fetch(API_BASE_URL + "/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: username.trim(), password: password.trim() }),
@@ -141,7 +141,7 @@ export default function Login({ setUser }) {
               faculties: registerData.faculties.map((id) => parseInt(id, 10)),
             };
 
-      const res = await fetch("http://localhost:5000" + endpoint, {
+      const res = await fetch(API_BASE_URL + "" + endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

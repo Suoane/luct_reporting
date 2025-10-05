@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import "./PRLRatingForm.css";
 
 export default function PRLRatingForm({ authHeaders }) {
@@ -21,7 +21,7 @@ export default function PRLRatingForm({ authHeaders }) {
     const fetchPRL = async () => {
       setFetchingPRL(true);
       try {
-        const res = await fetch("http://localhost:5000/api/lecturer/prl", {
+        const res = await fetch(API_BASE_URL + "/api/lecturer/prl", {
           headers: authHeaders()
         });
         const data = await res.json();
@@ -54,7 +54,7 @@ export default function PRLRatingForm({ authHeaders }) {
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/ratings/prl", {
+      const res = await fetch(API_BASE_URL + "/api/ratings/prl", {
         method: "POST",
         headers: authHeaders(),
         body: JSON.stringify({ rating, comments })

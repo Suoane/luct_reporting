@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import "./ReportForm.css";
 
 export default function ReportForm({ user, lecturerInfo, onSubmitted }) {
@@ -42,7 +42,7 @@ export default function ReportForm({ user, lecturerInfo, onSubmitted }) {
       if (!lecturerInfo?.stream_id) return;
       
       try {
-        const res = await fetch("http://localhost:5000/api/lecturer/faculties", {
+        const res = await fetch(API_BASE_URL + "/api/lecturer/faculties", {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
@@ -64,7 +64,7 @@ useEffect(() => {
     if (!lecturerInfo?.stream_id) return;
     
     try {
-      const res = await fetch("http://localhost:5000/api/lecturer/student-count", {
+      const res = await fetch(API_BASE_URL + "/api/lecturer/student-count", {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -110,7 +110,7 @@ useEffect(() => {
     setMessage("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/reports", {
+      const res = await fetch(API_BASE_URL + "/api/reports", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

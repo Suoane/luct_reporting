@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+﻿import React, { useState, useEffect, useCallback } from "react";
 import ReportForm from "./ReportForm";
 import PRLRatingForm from "./PRLRatingForm";
+import API_BASE_URL from '../config/api';
 import "./LecturerPage.css";
 
 export default function LecturerPage({ user }) {
@@ -31,7 +32,7 @@ export default function LecturerPage({ user }) {
   useEffect(() => {
     const fetchLecturerInfo = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/lecturer/info', {
+        const res = await fetch(`${API_BASE_URL}/api/lecturer/info`, {
           headers: authHeaders()
         });
         const data = await res.json();
@@ -55,7 +56,7 @@ export default function LecturerPage({ user }) {
       }).toString();
 
       const res = await fetch(
-        `http://localhost:5000/api/lecturer/attendance${queryParams ? `?${queryParams}` : ''}`,
+        `${API_BASE_URL}/api/lecturer/attendance${queryParams ? `?${queryParams}` : ''}`,
         { headers: authHeaders() }
       );
       const data = await res.json();
@@ -77,7 +78,7 @@ export default function LecturerPage({ user }) {
   useEffect(() => {
     const fetchMyReports = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/lecturer/reports", { 
+        const res = await fetch(`${API_BASE_URL}/api/lecturer/reports`, { 
           headers: authHeaders()
         });
         const data = await res.json();
@@ -97,7 +98,7 @@ export default function LecturerPage({ user }) {
 
     const fetchPrograms = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/lecturer/programs", { 
+        const res = await fetch(`${API_BASE_URL}/api/lecturer/programs`, { 
           headers: authHeaders()
         });
         const data = await res.json();
@@ -173,27 +174,27 @@ export default function LecturerPage({ user }) {
     );
   };
 
- const renderPrograms = () => {
-  if (programs.length === 0) return null;
+  const renderPrograms = () => {
+    if (programs.length === 0) return null;
 
-  return (
-    <div className="faculties-container">
-      {programs.map((prog, index) => (
-        <div key={`${prog.faculty_name}-${index}`} className="faculty-section">
-          <h4>{prog.faculty_name}</h4>
-          <div className="module-info">
-            <p><strong>Your Module:</strong> {prog.module_name || 'Not assigned'}</p>
-            <p><strong>Module Code:</strong> {prog.module_code || 'N/A'}</p>
+    return (
+      <div className="faculties-container">
+        {programs.map((prog, index) => (
+          <div key={`${prog.faculty_name}-${index}`} className="faculty-section">
+            <h4>{prog.faculty_name}</h4>
+            <div className="module-info">
+              <p><strong>Your Module:</strong> {prog.module_name || 'Not assigned'}</p>
+              <p><strong>Module Code:</strong> {prog.module_code || 'N/A'}</p>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-  );
-};
+        ))}
+      </div>
+    );
+  };
 
   const handleProgramSelect = async (programId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/programs/${programId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/programs/${programId}`, {
         headers: authHeaders()
       });
       const data = await response.json();
@@ -213,7 +214,7 @@ export default function LecturerPage({ user }) {
     if (!window.confirm('Are you sure you want to delete this report?')) return;
     
     try {
-      const res = await fetch(`http://localhost:5000/api/reports/${reportId}`, {
+      const res = await fetch(`${API_BASE_URL}/api/reports/${reportId}`, {
         method: 'DELETE',
         headers: authHeaders()
       });
@@ -249,7 +250,7 @@ export default function LecturerPage({ user }) {
                 : "Report submitted successfully");
               setError(null);
               // Refresh reports
-              fetch("http://localhost:5000/api/lecturer/reports", { 
+              fetch(`${API_BASE_URL}/api/lecturer/reports`, { 
                 headers: authHeaders()
               }).then(res => res.json()).then(data => {
                 if (data.success) setReports(data.reports || []);

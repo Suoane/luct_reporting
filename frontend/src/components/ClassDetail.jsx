@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import API_BASE_URL from '../config/api';
 import './ClassDetail.css';
 
 export default function ClassDetail({ user }) {
@@ -11,7 +12,7 @@ export default function ClassDetail({ user }) {
   useEffect(() => {
     const fetchClassDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/lecturer/classes/${moduleId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/lecturer/classes/${moduleId}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },

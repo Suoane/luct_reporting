@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
+import API_BASE_URL from '../config/api';
 
 export default function ComplaintResponses({ user, authHeaders }) {
   const [responses, setResponses] = useState([]);
@@ -7,7 +8,9 @@ export default function ComplaintResponses({ user, authHeaders }) {
   useEffect(() => {
     const fetchResponses = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/reports/student/complaints", { headers: authHeaders() });
+        const res = await fetch(`${API_BASE_URL}/api/reports/student/complaints`, { 
+          headers: authHeaders() 
+        });
         const data = await res.json();
         setResponses(data.complaints || []);
       } catch (err) {

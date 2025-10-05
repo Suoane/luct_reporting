@@ -8,5 +8,8 @@ export default {
         database: process.env.DB_NAME || 'luct_reporting',
         password: process.env.DB_PASSWORD || 'postgres',
         port: process.env.DB_PORT || 5432,
+        ssl: {
+            rejectUnauthorized: false  // Required for Render
+        }
     }
 };

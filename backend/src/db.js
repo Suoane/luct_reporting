@@ -10,7 +10,8 @@ const maskedDb = {
   host: config.database.host,
   database: config.database.database,
   port: config.database.port,
-  password: config.database.password ? '*****' : undefined
+  password: config.database.password ? '*****' : undefined,
+  ssl: config.database.ssl ? 'enabled' : 'disabled'
 };
 console.log('DB config (masked):', maskedDb);
 
@@ -26,7 +27,7 @@ pool.query('SELECT NOW()', (err, res) => {
   if (err) {
     console.error('Error connecting to the database:', err);
   } else {
-    console.log('Database connected successfully');
+    console.log('Database connected successfully at:', res.rows[0].now);
   }
 });
 

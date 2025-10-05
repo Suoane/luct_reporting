@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect } from "react";
+import API_BASE_URL from '../config/api';
 import "./ReportForm.css";
 
 export default function ReportForm({ user, lecturerInfo, onSubmitted }) {

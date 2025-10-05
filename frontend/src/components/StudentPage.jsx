@@ -2,6 +2,7 @@
 import ComplaintForm from "./ComplaintForm";
 import ComplaintResponses from "./ComplaintResponses";
 import { exportComplaintsToExcel } from "../utils/excelExport";
+import API_BASE_URL from '../config/api';
 import "./StudentPage.css";
 
 export default function StudentPage({ user }) {

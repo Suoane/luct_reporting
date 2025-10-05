@@ -2,6 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash, FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
 import "./Login.css";
+import API_BASE_URL from '../config/api';
 import regSuccessGif from "../assets/reg-succ.gif";
 
 export default function Login({ setUser }) {

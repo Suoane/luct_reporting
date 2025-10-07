@@ -178,9 +178,7 @@ export default function Login({ setUser }) {
       <div className={`login-page ${showRegister ? "show-register" : ""}`}>
         <div className="login-header">
           <h1 style={{ textAlign: "center", marginBottom: 0 }}>LUCT Reporting System</h1>
-          <p style={{ textAlign: "center", fontStyle: "italic", color: "#2e7d32", marginTop: 0 }}>
-            "Empowering students and lecturers to connect, report, and grow together."
-          </p>
+          
         </div>
 
         {!showRegister && (
@@ -285,38 +283,10 @@ export default function Login({ setUser }) {
           {showRegister ? "Back to Login" : "Don't have an account? Register"}
         </p>
 
-        <div className="info-cards-row">
-          <div className="info-card">
-            <h2>About This Web App</h2>
-            <p>
-              The LUCT Reporting System is a digital platform designed to streamline academic monitoring, feedback, and support for students and staff.
-            </p>
-          </div>
-          <div className="info-card">
-            <h2>Key Features</h2>
-            <ul>
-              <li><b>Student Portal:</b> Mark attendance, submit complaints/reports, and rate lecturers/modules.</li>
-              <li><b>Lecturer Portal:</b> Manage attendance, respond to complaints, monitor ratings.</li>
-              <li><b>Leaders:</b> Ensure academic quality through feedback and reporting.</li>
-            </ul>
-          </div>
-          <div className="info-card">
-            <h2>How It Works</h2>
-            <p>
-              Register or login. Dashboards show modules and lecturers tied to your stream, with secure role-based access.
-            </p>
-          </div>
-          <div className="info-card">
-            <h2>Security & Privacy</h2>
-            <p>
-              All data is protected and only accessible to authorized roles. Your information is never shared outside the university.
-            </p>
-          </div>
-        </div>
 
         {showAnimation && (
           <div className="registration-success-animation">
-            <img src={regSuccessGif} alt="Registration Success" className="anime-animation" />
+            
             <p>Registration Successful!</p>
           </div>
         )}

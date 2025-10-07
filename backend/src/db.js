@@ -4,25 +4,32 @@ import config from './config/config.js';
 
 const { Pool } = pg;
 
-// Log the DB connection config (mask password) for dev troubleshooting
+// 🔧 Adjust SSL setting for local development
+const isLocal = config.database.host === 'localhost' || config.database.host === '127.0.0.1';
+const dbConfig = {
+  ...config.database,
+  ssl: isLocal ? false : config.database.ssl
+};
+
+// 🕵️ Masked log for debugging
 const maskedDb = {
-  user: config.database.user,
-  host: config.database.host,
-  database: config.database.database,
-  port: config.database.port,
-  password: config.database.password ? '*****' : undefined,
-  ssl: config.database.ssl ? 'enabled' : 'disabled'
+  user: dbConfig.user,
+  host: dbConfig.host,
+  database: dbConfig.database,
+  port: dbConfig.port,
+  password: dbConfig.password ? '*****' : undefined,
+  ssl: dbConfig.ssl ? 'enabled' : 'disabled'
 };
 console.log('DB config (masked):', maskedDb);
 
-const pool = new Pool(config.database);
+const pool = new Pool(dbConfig);
 
 pool.on('error', (err) => {
   console.error('Unexpected error on idle client', err);
   process.exit(-1);
 });
 
-// Test the connection
+// 🚀 Test the connection
 pool.query('SELECT NOW()', (err, res) => {
   if (err) {
     console.error('Error connecting to the database:', err);

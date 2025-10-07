@@ -1374,7 +1374,7 @@ app.listen(PORT, async () => {
     console.log("Connected to PostgreSQL");
 
     const adminUsername = "admin";
-    const adminPassword = "adminbetter";
+    const adminPassword = "adminPha";
     const adminCheck = await pool.query("SELECT id FROM users WHERE username = $1 AND role = 'admin'", [adminUsername]);
     if (adminCheck.rows.length === 0) {
       const hashedPassword = await bcrypt.hash(adminPassword, 10);

@@ -1,30 +1,45 @@
+/* Main page wrapper with soft girly gradient */
 .login-page {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(120deg, #23243a 0%, #2c2d4e 100%);
+  background: linear-gradient(135deg, #ffb3d9 0%, #c471ed 50%, #f64f8a 100%);
   position: relative;
   padding: 2rem 0 0 0;
 }
 
-/* Footer glassmorphism/dark theme styling */
+/* Cute decorative top accent */
+.login-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #ff69b4, #ffb6c1, #ff1493, #ff69b4);
+  box-shadow: 0 2px 8px rgba(255, 105, 180, 0.4);
+}
+
+/* Footer with soft glassmorphism */
 .login-footer {
   width: 100%;
   margin-top: auto;
   padding: 1.5rem 0;
-  background: rgba(30, 30, 40, 0.9);
-  box-shadow: 0 -4px 32px rgba(0,0,0,0.18);
-  backdrop-filter: blur(8px);
-  color: #e0e0e0;
+  background: rgba(255, 182, 193, 0.25);
+  box-shadow: 0 -4px 32px rgba(255, 105, 180, 0.15);
+  backdrop-filter: blur(12px);
+  color: #fff;
   text-align: center;
   font-size: 1rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .footer-copy {
   font-size: 1rem;
   margin-bottom: 0.5rem;
-  color: #bdbdbd;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .footer-links {
@@ -38,7 +53,7 @@
 }
 
 .footer-links a {
-  color: #e0e0e0;
+  color: #fff;
   text-decoration: none;
   font-weight: 500;
   font-size: 1.08rem;
@@ -46,15 +61,16 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.4rem 1.1rem;
-  border-radius: 12px;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  background: rgba(40, 40, 60, 0.35);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .footer-links a:hover {
-  background: rgba(10, 80, 180, 0.18);
-  color: #90caf9;
-  box-shadow: 0 2px 12px rgba(10,80,180,0.12);
+  background: rgba(255, 255, 255, 0.35);
+  color: #ff1493;
+  box-shadow: 0 4px 15px rgba(255, 20, 147, 0.2);
+  transform: translateY(-2px);
 }
 
 .footer-icon {
@@ -62,7 +78,8 @@
   align-items: center;
   margin-right: 0.3rem;
 }
-/* Info Cards Row and Card Styling */
+
+/* Feature cards with softer styling */
 .info-cards-row {
   display: flex;
   flex-wrap: wrap;
@@ -74,26 +91,26 @@
 .info-card {
   flex: 1 1 340px;
   max-width: 400px;
-  background: rgba(255,255,255,0.07);
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(255, 105, 180, 0.2);
   padding: 24px;
-  border: 1px solid rgba(255,255,255,0.12);
-  color: #fff;
+  border: 2px solid rgba(255, 182, 193, 0.5);
+  color: #d63384;
   backdrop-filter: blur(8px);
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  transition: all 0.3s ease;
   margin-bottom: 12px;
 }
 
 .info-card h2 {
-  color: #fff;
+  color: #c71585;
   font-size: 1.4rem;
   margin-bottom: 1rem;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  text-shadow: 0 2px 4px rgba(255, 105, 180, 0.15);
 }
 
 .info-card p, .info-card ul {
-  color: #ccc;
+  color: #8b4789;
   font-size: 1.08rem;
 }
 
@@ -102,17 +119,16 @@
 }
 
 .info-card li b {
-  color: #fff;
+  color: #c71585;
 }
 
 .info-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 16px 40px rgba(237, 28, 36, 0.18), 0 8px 32px rgba(0,0,0,0.3);
-  background: rgba(237, 28, 36, 0.09);
-  border-color: #ED1C24;
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(255, 105, 180, 0.3);
+  background: rgba(255, 240, 250, 0.95);
+  border-color: #ff69b4;
 }
 
-/* Footer content styling */
 .footer-content {
   width: 100%;
   margin: 0;
@@ -123,143 +139,139 @@
   font-weight: bold;
   font-size: 1.2rem;
   margin-bottom: 8px;
-}
-.login-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #1a1f2c 0%, #121620 100%);
-  padding: 2rem;
-  text-align: center;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  color: #ffffff;
+  color: #fff;
 }
 
+/* Form containers with cute rounded styling */
 .login-page form,
 .register-form {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.95);
   padding: 2.5rem;
-  border-radius: 10px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-radius: 25px;
+  box-shadow: 0 10px 40px rgba(255, 105, 180, 0.25);
   width: 100%;
   max-width: 400px;
   margin-bottom: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
+  border: 2px solid rgba(255, 182, 193, 0.6);
+  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
 
-/* Hide login form when register is shown */
+.login-page form:hover,
+.register-form:hover {
+  box-shadow: 0 12px 50px rgba(255, 105, 180, 0.35);
+  transform: translateY(-3px);
+}
+
 .login-page.show-register form:not(.register-form) {
   display: none;
 }
 
-/* Position toggle link */
 .toggle-register {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.85);
   padding: 0.8rem 1.5rem;
-  border-radius: 5px;
+  border-radius: 20px;
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 182, 193, 0.5);
   margin-top: 1rem;
   transition: all 0.3s ease;
+  cursor: pointer;
+  color: #c71585;
+  font-weight: 600;
 }
 
 .toggle-register:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
+  background: rgba(255, 240, 250, 0.95);
+  transform: scale(1.05);
+  border-color: #ff69b4;
+  box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
 }
 
+/* Headings with girly flair */
 .login-page h1,
 .login-page h2 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: #ffffff;
+  color: #c71585;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(255, 105, 180, 0.2);
 }
 
 .login-page p {
   font-size: 1.2rem;
-  color: #aaa;
+  color: #d946ef;
 }
 
+/* Input fields with softer appearance */
 .login-page input,
 .login-page select {
   width: 100%;
   padding: 0.8rem 1rem;
   margin: 0.5rem 0;
-  border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  border: 2px solid rgba(255, 182, 193, 0.5);
   outline: none;
   font-size: 1rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #8b008b;
   transition: all 0.3s ease;
 }
 
-.login-page input::placeholder,
-.login-page select::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+.login-page input::placeholder {
+  color: rgba(199, 21, 133, 0.5);
 }
 
 .login-page select option {
-  background-color: #1a1f2c;
-  color: #ffffff;
+  background-color: #fff5f7;
+  color: #8b008b;
 }
 
 .login-page input:focus,
 .login-page select:focus {
-  border-color: #ED1C24;
-  box-shadow: 0 0 0 3px rgba(237, 28, 36, 0.1);
+  border-color: #ff69b4;
+  box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2);
   background-color: #ffffff;
+  transform: scale(1.01);
 }
 
 .login-page input:hover,
 .login-page select:hover {
   background-color: #ffffff;
-  border-color: #ED1C24;
+  border-color: #ffb6c1;
 }
 
-.login-page input::placeholder {
-  color: #999;
-}
-
+/* Cute pink button styling */
 .login-page button {
   margin-top: 1.5rem;
   padding: 0.8rem 2rem;
   font-size: 1rem;
   border: none;
-  border-radius: 5px;
-  background-color: #ED1C24;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
   color: #fff;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-transform: uppercase;
   letter-spacing: 1px;
-  font-weight: 500;
+  font-weight: 600;
   width: 100%;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(237, 28, 36, 0.3);
+  box-shadow: 0 6px 20px rgba(255, 20, 147, 0.35);
 }
 
 .login-page button:hover {
-  background-color: #d01920;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(237, 28, 36, 0.3);
+  background: linear-gradient(135deg, #ff1493 0%, #c71585 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 20, 147, 0.45);
 }
 
 .login-page button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 5px rgba(237, 28, 36, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(255, 20, 147, 0.35);
 }
 
-/* Responsive styles */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .login-page form {
     width: 90%;
@@ -282,33 +294,21 @@
   }
 }
 
-.toggle-register {
-  margin-top: 1rem;
-  cursor: pointer;
-  color: #ED1C24;
-  font-weight: 500;
-  text-decoration: underline;
-  transition: color 0.3s ease;
-}
-
-.toggle-register:hover {
-  color: #d01920;
-}
-
 .login-page input {
   width: 100%;
   padding: 0.8rem 1rem;
   margin: 0.5rem 0;
-  border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  border: 2px solid rgba(255, 182, 193, 0.5);
   outline: none;
   font-size: 1rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #8b008b;
   transition: all 0.3s ease;
   box-sizing: border-box;
 }
 
+/* Password field wrapper */
 .password-wrapper {
   position: relative;
   width: 100%;
@@ -322,100 +322,101 @@
 }
 
 .password-wrapper input:focus {
-  border-color: #ED1C24;
-  background-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 3px rgba(237, 28, 36, 0.2);
+  border-color: #ff69b4;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.2);
 }
 
 .password-wrapper input:hover {
-  border-color: rgba(255, 255, 255, 0.3);
-  background-color: rgba(255, 255, 255, 0.12);
+  border-color: #ffb6c1;
+  background-color: rgba(255, 255, 255, 0.95);
 }
 
+/* Cute password toggle icon */
 .password-icon {
   position: absolute;
   right: 0.8rem;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #ED1C24;
+  color: #ff69b4;
   font-size: 1.2rem;
-  transition: color 0.3s, background-color 0.3s;
+  transition: all 0.3s ease;
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 182, 193, 0.3);
   border-radius: 50%;
   pointer-events: all;
   height: 100%;
 }
 
 .password-icon:hover {
-  color: #ffffff;
-  background: rgba(237, 28, 36, 0.2);
+  color: #ff1493;
+  background: rgba(255, 105, 180, 0.4);
+  transform: translateY(-50%) scale(1.1);
 }
 
-.login-page input:focus,
-.login-page select:focus {
-  border-color: #ED1C24;
-  background-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 3px rgba(237, 28, 36, 0.2);
-}
-
+/* Success and error messages with softer colors */
 .success {
-  color: #ffffff;
-  background: rgba(25, 135, 84, 0.2);
+  color: #fff;
+  background: linear-gradient(135deg, #98d8c8 0%, #6fcf97 100%);
   padding: 0.75rem;
-  border-radius: 5px;
+  border-radius: 15px;
   margin: 1rem 0;
-  border: 1px solid rgba(25, 135, 84, 0.3);
+  border: 2px solid rgba(111, 207, 151, 0.5);
+  box-shadow: 0 4px 12px rgba(111, 207, 151, 0.2);
 }
 
 .error {
-  color: #ffffff;
-  background: rgba(237, 28, 36, 0.2);
+  color: #fff;
+  background: linear-gradient(135deg, #ff6b9d 0%, #ee5a6f 100%);
   padding: 0.75rem;
-  border-radius: 5px;
+  border-radius: 15px;
   margin: 1rem 0;
-  border: 1px solid rgba(237, 28, 36, 0.3);
+  border: 2px solid rgba(255, 107, 157, 0.5);
+  box-shadow: 0 4px 12px rgba(255, 107, 157, 0.2);
 }
 
 .register-form label {
   display: block;
   text-align: left;
   margin-top: 0.5rem;
-  font-weight: 500;
+  font-weight: 600;
+  color: #c71585;
 }
 
 .role-select,
 .register-form select {
   padding: 0.8rem 1rem;
-  border-radius: 6px;
-  border: none;
+  border-radius: 15px;
+  border: 2px solid rgba(255, 182, 193, 0.5);
   outline: none;
   margin-bottom: 0.5rem;
   font-size: 1rem;
-  background-color: #1a1a2e;
-  color: #fff;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #8b008b;
 }
+
+/* Success animation popup */
 .registration-success-animation {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  background: linear-gradient(135deg, #ffffff 0%, #fff0f7 100%);
   padding: 2rem;
-  border-radius: 10px;
+  border-radius: 25px;
   text-align: center;
   z-index: 9999;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-  border: 1px solid rgba(237, 28, 36, 0.1);
+  box-shadow: 0 15px 50px rgba(255, 105, 180, 0.3);
+  border: 3px solid #ffb6c1;
 }
 
 .registration-success-animation p {
-  color: #ED1C24;
+  color: #c71585;
   font-weight: 600;
   margin-top: 1rem;
   font-size: 1.2rem;
@@ -425,20 +426,24 @@
   width: 150px;
   height: auto;
   margin-bottom: 1rem;
-  animation: bounce 1s infinite alternate;
+  animation: float 1.5s infinite alternate ease-in-out;
 }
 
-@keyframes bounce {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-10px); }
+@keyframes float {
+  0% { 
+    transform: translateY(0) rotate(0deg); 
+  }
+  100% { 
+    transform: translateY(-12px) rotate(3deg); 
+  }
 }
 
-/* App wrapper styles */
+/* App wrapper */
 .app-wrapper {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(120deg, #23243a 0%, #2c2d4e 100%);
+  background: linear-gradient(135deg, #ffb3d9 0%, #c471ed 50%, #f64f8a 100%);
 }
 
 .login-page {
@@ -447,26 +452,4 @@
   flex-direction: column;
   align-items: center;
   padding: 2rem 1rem;
-}
-
-/* Footer styles */
-.login-footer {
-  width: 100%;
-  background: rgba(30, 30, 40, 0.95);
-  box-shadow: 0 -4px 32px rgba(0,0,0,0.18);
-  backdrop-filter: blur(8px);
-  padding: 1.5rem 0;
-  color: #e0e0e0;
-  text-align: center;
-}
-
-/* Additional Limkokwing-specific styles */
-.login-page::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background: #ED1C24;
 }

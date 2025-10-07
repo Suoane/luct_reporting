@@ -14,9 +14,8 @@ import ClassDetail from "./components/ClassDetail";
 import { FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
 
 export default function App() {
-  const linkedinUrl = "https://www.linkedin.com/in/divinechukwudi";
-  const githubUrl = "https://github.com/DivineChukwudi";
-  const gmailUrl = "mailto:chukwudidivine20@gmail.com";
+  const githubUrl = "https://github.com/Phalatsane";
+  const gmailUrl = "mailto:phalatsanemolise30@gmail.com";
   // ==================== USER STATE ====================
   const [user, setUser] = useState(() => {
     try {
@@ -130,10 +129,9 @@ export default function App() {
       </Routes>
        <footer className="login-footer">
         <div className="footer-copy">
-          &copy; {new Date().getFullYear()} LUCT Reporting System. All rights reserved | System designed by etern.pptx
+          &copy; {new Date().getFullYear()} LUCT Reporting System. All rights reserved
         </div>
         <div className="footer-links">
-          <a href={linkedinUrl} target="_blank" rel="noopener noreferrer"><FaLinkedin /> LinkedIn</a>
           <a href={githubUrl} target="_blank" rel="noopener noreferrer"><FaGithub /> GitHub</a>
           <a href={gmailUrl} target="_blank" rel="noopener noreferrer"><FaEnvelope /> Gmail</a>
         </div>

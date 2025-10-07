@@ -294,7 +294,7 @@ export default function StudentPage({ user }) {
                 fontWeight: '600'
               }}
             >
-              ðŸ“¥ Export to Excel
+              📥 Export to Excel
             </button>
           </div>
 

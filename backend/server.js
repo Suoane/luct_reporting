@@ -8,6 +8,10 @@ dotenv.config();
 
 const app = express();
 
+// IMPORTANT: Trust proxy for Render/production environment
+// This must come before any rate limiting middleware
+app.set('trust proxy', 1);
+
 // Import middleware
 const { errorHandler, notFound } = require('./middleware/errorHandler');
 const { apiLimiter } = require('./middleware/rateLimiter');
@@ -16,8 +20,21 @@ const { apiLimiter } = require('./middleware/rateLimiter');
 app.use(helmet());
 
 // CORS configuration
+const allowedOrigins = process.env.FRONTEND_URL 
+  ? process.env.FRONTEND_URL.split(',') 
+  : ['http://localhost:3000'];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, curl)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   credentials: true,
 }));
 
@@ -92,8 +109,9 @@ const server = app.listen(PORT, () => {
   console.log(`📡 Server running on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🗄️  Database: ${process.env.DB_NAME || 'luct_report_tumelo'}`);
-  console.log(`🔒 CORS Origin: ${process.env.FRONTEND_URL || 'http://localhost:3000'}`);
+  console.log(`🔒 CORS Origins: ${allowedOrigins.join(', ')}`);
   console.log(`🔑 JWT Secret: ${process.env.JWT_SECRET ? '✓ Configured' : '✗ Not configured'}`);
+  console.log(`🔐 Trust Proxy: ${app.get('trust proxy') ? '✓ Enabled' : '✗ Disabled'}`);
   console.log('='.repeat(50));
   console.log('📋 Available Endpoints:');
   console.log(`   GET  /                    - API Info`);

@@ -8,9 +8,25 @@ const { validateRegistration, validateLogin } = require('../middleware/validatio
 const { authLimiter, registerLimiter } = require('../middleware/rateLimiter');
 const { catchAsync, AppError } = require('../middleware/errorHandler');
 
+// Validate JWT_SECRET on module load
+if (!process.env.JWT_SECRET) {
+  console.error('❌ CRITICAL: JWT_SECRET environment variable is not set!');
+  throw new Error('JWT_SECRET must be configured');
+}
+
+// Helper function to generate token
+const generateToken = (payload) => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET is not configured');
+  }
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' });
+};
+
 // Register route
 router.post('/register', registerLimiter, validateRegistration, catchAsync(async (req, res) => {
   const { full_name, email, password, role, stream_id } = req.body;
+
+  console.log('Registration attempt for:', email);
 
   // Check if user already exists
   const userExists = await db.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -33,11 +49,9 @@ router.post('/register', registerLimiter, validateRegistration, catchAsync(async
   const user = result.rows[0];
 
   // Generate JWT token
-  const token = jwt.sign(
-    { user_id: user.user_id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: '24h' }
-  );
+  const token = generateToken({ user_id: user.user_id, role: user.role });
+
+  console.log('User registered successfully:', user.email);
 
   res.status(201).json({
     message: 'User registered successfully',
@@ -56,6 +70,8 @@ router.post('/register', registerLimiter, validateRegistration, catchAsync(async
 router.post('/login', authLimiter, validateLogin, catchAsync(async (req, res) => {
   const { email, password } = req.body;
 
+  console.log('Login attempt for:', email);
+
   // Find user
   const result = await db.query(
     `SELECT u.*, s.stream_name, s.stream_code 
@@ -66,23 +82,26 @@ router.post('/login', authLimiter, validateLogin, catchAsync(async (req, res) =>
   );
 
   if (result.rows.length === 0) {
+    console.log('User not found:', email);
     throw new AppError('Invalid credentials', 401);
   }
 
   const user = result.rows[0];
+  console.log('User found:', email);
 
   // Compare password
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
+    console.log('Password mismatch for:', email);
     throw new AppError('Invalid credentials', 401);
   }
 
+  console.log('Password matched, generating token...');
+
   // Generate JWT token
-  const token = jwt.sign(
-    { user_id: user.user_id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: '24h' }
-  );
+  const token = generateToken({ user_id: user.user_id, role: user.role });
+
+  console.log('Login successful for:', email);
 
   res.json({
     message: 'Login successful',

@@ -1,7 +1,13 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// ✅ Require .env base URL — no fallback allowed
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
+if (!API_BASE_URL) {
+  throw new Error("❌ REACT_APP_API_URL is not defined in your environment variables.");
+}
+
+// ✅ Axios instance setup
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -9,7 +15,7 @@ const api = axios.create({
   },
 });
 
-// Add token to requests
+// ✅ Interceptor to attach JWT token from localStorage
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -18,25 +24,18 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Handle response errors
+// ✅ Response interceptor to handle 401 errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Only redirect to login if:
-    // 1. We get a 401 error
-    // 2. We're NOT on the login or register pages
-    // 3. We're NOT calling public endpoints (like /streams)
     if (error.response?.status === 401) {
       const currentPath = window.location.pathname;
       const isAuthPage = currentPath === '/login' || currentPath === '/register';
       const isPublicEndpoint = error.config?.url?.includes('/streams');
-      
-      // Only redirect if not on auth pages and not a public endpoint
+
       if (!isAuthPage && !isPublicEndpoint) {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -47,7 +46,7 @@ api.interceptors.response.use(
   }
 );
 
-// Auth endpoints
+// ✅ Auth API
 export const authAPI = {
   login: (credentials) => api.post('/auth/login', credentials),
   register: (userData) => api.post('/auth/register', userData),
@@ -56,7 +55,7 @@ export const authAPI = {
   logout: () => api.post('/auth/logout'),
 };
 
-// Users endpoints
+// ✅ Users API
 export const usersAPI = {
   getAll: (params) => api.get('/users', { params }),
   getById: (id) => api.get(`/users/${id}`),
@@ -66,7 +65,7 @@ export const usersAPI = {
   getByStream: (streamId) => api.get(`/users/stream/${streamId}`),
 };
 
-// Streams endpoints
+// ✅ Streams API
 export const streamsAPI = {
   getAll: () => api.get('/streams'),
   getById: (id) => api.get(`/streams/${id}`),
@@ -75,7 +74,7 @@ export const streamsAPI = {
   delete: (id) => api.delete(`/streams/${id}`),
 };
 
-// Courses endpoints
+// ✅ Courses API
 export const coursesAPI = {
   getAll: (params) => api.get('/courses', { params }),
   getById: (id) => api.get(`/courses/${id}`),
@@ -86,7 +85,7 @@ export const coursesAPI = {
   assignLecturer: (id, lecturerId) => api.patch(`/courses/${id}/assign`, { lecturer_id: lecturerId }),
 };
 
-// Classes endpoints
+// ✅ Classes API
 export const classesAPI = {
   getAll: (params) => api.get('/classes', { params }),
   getById: (id) => api.get(`/classes/${id}`),
@@ -99,25 +98,25 @@ export const classesAPI = {
   removeCourse: (id, courseId) => api.delete(`/classes/${id}/courses/${courseId}`),
 };
 
-// Reports endpoints
+// ✅ Reports API
 export const reportsAPI = {
   getAll: (params) => api.get('/reports', { params }),
   getById: (id) => api.get(`/reports/${id}`),
   create: (data) => api.post('/reports', data),
   update: (id, data) => api.put(`/reports/${id}`, data),
   delete: (id) => api.delete(`/reports/${id}`),
-  getMyReports: () => api.get('/reports/my/reports'),  // Fixed: was /my-reports
+  getMyReports: () => api.get('/reports/my/reports'),
   getForReview: () => api.get('/reports/for-review'),
   addFeedback: (id, feedback) => api.post(`/reports/${id}/feedback`, feedback),
   updateStatus: (id, status) => api.patch(`/reports/${id}/status`, { status }),
-  exportToExcel: (params) => api.get('/reports/export/excel', { 
-    params, 
-    responseType: 'blob' 
+  exportToExcel: (params) => api.get('/reports/export/excel', {
+    params,
+    responseType: 'blob',
   }),
   getRecent: (limit) => api.get('/reports/recent', { params: { limit } }),
 };
 
-// Dashboard endpoints
+// ✅ Dashboard API
 export const dashboardAPI = {
   getStats: () => api.get('/dashboard/stats'),
   getStudentDashboard: () => api.get('/dashboard/student'),
@@ -126,4 +125,5 @@ export const dashboardAPI = {
   getProgramLeaderDashboard: () => api.get('/dashboard/program-leader'),
 };
 
+// ✅ Export default axios instance
 export default api;

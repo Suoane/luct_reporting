@@ -1,24 +1,30 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
+// Ensure all required env vars are set
+const requiredEnvVars = ['DB_USER', 'DB_HOST', 'DB_NAME', 'DB_PASSWORD', 'DB_PORT'];
+for (const varName of requiredEnvVars) {
+  if (!process.env[varName]) {
+    throw new Error(`Missing required environment variable: ${varName}`);
+  }
+}
+
+// Initialize database pool
 const pool = new Pool({
-  user: process.env.DB_USER || 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  database: process.env.DB_NAME || 'luct_report_tumelo',
-  password: process.env.DB_PASSWORD || '0883',
-  port: process.env.DB_PORT || 5432,
-  // Only use SSL in production, not in local development
-  ssl: process.env.NODE_ENV === 'production' ? {
-    rejectUnauthorized: false,
-  } : false,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: parseInt(process.env.DB_PORT, 10),
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
 
-// Test database connection
+// Optional: test connection on startup
 pool.connect((err, client, release) => {
   if (err) {
-    console.error('Error connecting to database:', err.stack);
+    console.error('❌ Error connecting to database:', err.stack);
   } else {
-    console.log('Successfully connected to PostgreSQL database:', process.env.DB_NAME || 'luct_report_tumelo');
+    console.log(`✅ Connected to PostgreSQL database: ${process.env.DB_NAME}`);
     release();
   }
 });

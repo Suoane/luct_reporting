@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 
 console.log('Lecturer Pass: ');
-const password = 'lec123';
+const password = 'lecturer123';
 const hash = bcrypt.hashSync(password, 10);
 console.log('Password:', password);
 console.log('Hash:', hash);

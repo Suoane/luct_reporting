@@ -8,28 +8,23 @@ const Navbar = () => {
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // Don't show navbar on landing, login, or register pages
-  if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register') {
+  // Hide navbar on landing, login, or register pages
+  if (['/', '/login', '/register'].includes(location.pathname)) {
     return null;
   }
 
   const handleLogout = async () => {
-    console.log('Logout clicked!'); // Debug log
+    console.log('Logout clicked!');
     try {
       await authAPI.logout();
-      console.log('API logout successful'); // Debug log
+      console.log('API logout successful');
     } catch (err) {
       console.error('Logout error:', err);
     } finally {
-      // Clear storage
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      console.log('Storage cleared, navigating to login'); // Debug log
-      
-      // Force navigation
+      console.log('Storage cleared, navigating to login');
       navigate('/login', { replace: true });
-      
-      // Force page reload to clear any cached state
       window.location.href = '/login';
     }
   };
@@ -82,12 +77,25 @@ const Navbar = () => {
 
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto">
+            {/* Dashboard */}
             <li className="nav-item">
               <Link className="nav-link" to={getDashboardLink()}>
                 Dashboard
               </Link>
             </li>
 
+            {/* Student Links */}
+            {user.role === 'student' && (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/student/reports">
+                    My Reports
+                  </Link>
+                </li>
+              </>
+            )}
+
+            {/* Lecturer Links */}
             {user.role === 'lecturer' && (
               <>
                 <li className="nav-item">
@@ -103,6 +111,7 @@ const Navbar = () => {
               </>
             )}
 
+            {/* Principal Lecturer Links */}
             {user.role === 'principal_lecturer' && (
               <>
                 <li className="nav-item">
@@ -113,6 +122,7 @@ const Navbar = () => {
               </>
             )}
 
+            {/* Program Leader Links */}
             {user.role === 'program_leader' && (
               <>
                 <li className="nav-item">
@@ -124,6 +134,7 @@ const Navbar = () => {
             )}
           </ul>
 
+          {/* User Info & Logout */}
           <div className="d-flex align-items-center">
             <span className="navbar-text text-white me-3">
               <strong>{user.full_name || 'User'}</strong> ({getRoleDisplay()})

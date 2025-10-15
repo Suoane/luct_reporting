@@ -8,8 +8,8 @@ const Navbar = () => {
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-  // Don't show navbar on login/register pages
-  if (location.pathname === '/login' || location.pathname === '/register') {
+  // Don't show navbar on landing, login, or register pages
+  if (location.pathname === '/' || location.pathname === '/login' || location.pathname === '/register') {
     return null;
   }
 
@@ -68,7 +68,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-fluid">
         <Link className="navbar-brand" to={getDashboardLink()}>
-          LUCT Reporting System
+          Limkokwing Reporting System
         </Link>
         
         <button
